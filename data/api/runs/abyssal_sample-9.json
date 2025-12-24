@@ -1,0 +1,608 @@
+{
+  "sample_id": "abyssal_sample-9",
+  "input_type": "single",
+  "input_files": [
+    "/home/megh/edna/data/api/uploads/7462348db43f4cbc9eabf69dd2845bd1_sample_single_02.fastq"
+  ],
+  "output_dir": "results/abyssal_sample-9",
+  "start_time": "2025-09-30T21:39:44.992160",
+  "end_time": "2025-09-30T21:39:46.707465",
+  "processing_time": 1.715305,
+  "success": true,
+  "error": null,
+  "status": "completed",
+  "pipeline_steps": [
+    {
+      "step": "preprocessing",
+      "status": "completed",
+      "results": {
+        "sample_id": "abyssal_sample-9",
+        "input_file": "/home/megh/edna/data/api/uploads/7462348db43f4cbc9eabf69dd2845bd1_sample_single_02.fastq",
+        "output_dir": "results/abyssal_sample-9/abyssal_sample-9",
+        "processing_steps": [
+          {
+            "step": "quality_control",
+            "input_sequences": 25,
+            "output_sequences": 25,
+            "output_file": "results/abyssal_sample-9/abyssal_sample-9/filtered.fastq"
+          },
+          {
+            "step": "denoising",
+            "method": "DenoiseDADA2",
+            "input_sequences": 25,
+            "output_asvs": 25,
+            "output_file": "results/abyssal_sample-9/abyssal_sample-9/asvs.fasta",
+            "abundance_table": {
+              "ASV_1": 1,
+              "ASV_2": 1,
+              "ASV_3": 1,
+              "ASV_4": 1,
+              "ASV_5": 1,
+              "ASV_6": 1,
+              "ASV_7": 1,
+              "ASV_8": 1,
+              "ASV_9": 1,
+              "ASV_10": 1,
+              "ASV_11": 1,
+              "ASV_12": 1,
+              "ASV_13": 1,
+              "ASV_14": 1,
+              "ASV_15": 1,
+              "ASV_16": 1,
+              "ASV_17": 1,
+              "ASV_18": 1,
+              "ASV_19": 1,
+              "ASV_20": 1,
+              "ASV_21": 1,
+              "ASV_22": 1,
+              "ASV_23": 1,
+              "ASV_24": 1,
+              "ASV_25": 1
+            }
+          },
+          {
+            "step": "chimera_removal",
+            "input_asvs": 25,
+            "output_asvs": 25,
+            "chimeric_asvs": 0,
+            "output_file": "results/abyssal_sample-9/abyssal_sample-9/asvs_no_chimeras.fasta",
+            "abundance_table": {
+              "ASV_1": 1,
+              "ASV_2": 1,
+              "ASV_3": 1,
+              "ASV_4": 1,
+              "ASV_5": 1,
+              "ASV_6": 1,
+              "ASV_7": 1,
+              "ASV_8": 1,
+              "ASV_9": 1,
+              "ASV_10": 1,
+              "ASV_11": 1,
+              "ASV_12": 1,
+              "ASV_13": 1,
+              "ASV_14": 1,
+              "ASV_15": 1,
+              "ASV_16": 1,
+              "ASV_17": 1,
+              "ASV_18": 1,
+              "ASV_19": 1,
+              "ASV_20": 1,
+              "ASV_21": 1,
+              "ASV_22": 1,
+              "ASV_23": 1,
+              "ASV_24": 1,
+              "ASV_25": 1
+            }
+          }
+        ],
+        "final_asvs": 25,
+        "final_asv_file": "results/abyssal_sample-9/abyssal_sample-9/asvs_no_chimeras.fasta",
+        "abundance_table": {
+          "ASV_1": 1,
+          "ASV_2": 1,
+          "ASV_3": 1,
+          "ASV_4": 1,
+          "ASV_5": 1,
+          "ASV_6": 1,
+          "ASV_7": 1,
+          "ASV_8": 1,
+          "ASV_9": 1,
+          "ASV_10": 1,
+          "ASV_11": 1,
+          "ASV_12": 1,
+          "ASV_13": 1,
+          "ASV_14": 1,
+          "ASV_15": 1,
+          "ASV_16": 1,
+          "ASV_17": 1,
+          "ASV_18": 1,
+          "ASV_19": 1,
+          "ASV_20": 1,
+          "ASV_21": 1,
+          "ASV_22": 1,
+          "ASV_23": 1,
+          "ASV_24": 1,
+          "ASV_25": 1
+        },
+        "success": true,
+        "abundance_file": "results/abyssal_sample-9/abyssal_sample-9/abundance_table.txt",
+        "summary_stats": {
+          "sample_id": "abyssal_sample-9",
+          "total_processing_steps": 3,
+          "final_asvs": 25,
+          "quality_control_input": 25,
+          "quality_control_output": 25,
+          "denoising_input": 25,
+          "denoising_output": 25,
+          "chimera_removal_output": 25
+        },
+        "log_file": "results/abyssal_sample-9/abyssal_sample-9/preprocessing_log.txt"
+      }
+    },
+    {
+      "step": "feature_extraction",
+      "status": "completed",
+      "results": {
+        "total_asvs": 25,
+        "feature_types": [
+          "kmer_3",
+          "kmer_4",
+          "kmer_5",
+          "kmer_6",
+          "kmer_combined",
+          "composition",
+          "structural",
+          "one_hot",
+          "embeddings"
+        ],
+        "feature_shapes": {
+          "kmer_3": [
+            25,
+            64
+          ],
+          "kmer_4": [
+            25,
+            256
+          ],
+          "kmer_5": [
+            25,
+            1024
+          ],
+          "kmer_6": [
+            25,
+            4096
+          ],
+          "kmer_combined": [
+            25,
+            5440
+          ],
+          "composition": [
+            25,
+            23
+          ],
+          "structural": [
+            25,
+            8
+          ],
+          "one_hot": [
+            25,
+            1000,
+            4
+          ],
+          "embeddings": [
+            25,
+            128
+          ]
+        },
+        "recommended_features": [
+          "composition",
+          "structural",
+          "kmer_3",
+          "kmer_4",
+          "kmer_5",
+          "embeddings",
+          "one_hot"
+        ],
+        "statistics_file": "results/abyssal_sample-9/feature_statistics.txt",
+        "features_file": "results/abyssal_sample-9/features.pkl"
+      }
+    },
+    {
+      "step": "taxonomic_classification",
+      "status": "completed",
+      "results": {
+        "total_classified": 25,
+        "taxonomy": {
+          "ASV_24": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Gammaproteobacteria",
+            "order": "Pseudomonadales",
+            "family": "Pseudomonadaceae",
+            "genus": "Marianobacter",
+            "species": "Marianobacter marina"
+          },
+          "ASV_23": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Gammaproteobacteria",
+            "order": "Alteromonadales",
+            "family": "Alteromonadaceae",
+            "genus": "Bathycella",
+            "species": "Bathycella profunda"
+          },
+          "ASV_12": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Alphaproteobacteria",
+            "order": "Rhodospirillales",
+            "family": "Pelagibacteraceae",
+            "genus": "Hadopelagia",
+            "species": "Hadopelagia pelagica"
+          },
+          "ASV_1": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Gammaproteobacteria",
+            "order": "Oceanospirillales",
+            "family": "Alcanivoracaceae",
+            "genus": "Abyssalbacter",
+            "species": "Abyssalbacter abyssi"
+          },
+          "ASV_15": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Gammaproteobacteria",
+            "order": "Vibrionales",
+            "family": "Vibrionaceae",
+            "genus": "Trenchia",
+            "species": "Trenchia stellaris"
+          },
+          "ASV_22": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Alphaproteobacteria",
+            "order": "Rhodospirillales",
+            "family": "Pelagibacteraceae",
+            "genus": "Hadopelagia",
+            "species": "Hadopelagia pelagica"
+          },
+          "ASV_21": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Gammaproteobacteria",
+            "order": "Oceanospirillales",
+            "family": "Alcanivoracaceae",
+            "genus": "Abyssalbacter",
+            "species": "Abyssalbacter abyssi"
+          },
+          "ASV_14": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Gammaproteobacteria",
+            "order": "Pseudomonadales",
+            "family": "Pseudomonadaceae",
+            "genus": "Marianobacter",
+            "species": "Marianobacter marina"
+          },
+          "ASV_2": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Alphaproteobacteria",
+            "order": "Rhodospirillales",
+            "family": "Pelagibacteraceae",
+            "genus": "Hadopelagia",
+            "species": "Hadopelagia pelagica"
+          },
+          "ASV_5": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Gammaproteobacteria",
+            "order": "Vibrionales",
+            "family": "Vibrionaceae",
+            "genus": "Trenchia",
+            "species": "Trenchia stellaris"
+          },
+          "ASV_25": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Gammaproteobacteria",
+            "order": "Vibrionales",
+            "family": "Vibrionaceae",
+            "genus": "Trenchia",
+            "species": "Trenchia stellaris"
+          },
+          "ASV_18": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Gammaproteobacteria",
+            "order": "Alteromonadales",
+            "family": "Alteromonadaceae",
+            "genus": "Bathycella",
+            "species": "Bathycella profunda"
+          },
+          "ASV_6": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Gammaproteobacteria",
+            "order": "Oceanospirillales",
+            "family": "Alcanivoracaceae",
+            "genus": "Abyssalbacter",
+            "species": "Abyssalbacter abyssi"
+          },
+          "ASV_13": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Gammaproteobacteria",
+            "order": "Alteromonadales",
+            "family": "Alteromonadaceae",
+            "genus": "Bathycella",
+            "species": "Bathycella profunda"
+          },
+          "ASV_7": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Alphaproteobacteria",
+            "order": "Rhodospirillales",
+            "family": "Pelagibacteraceae",
+            "genus": "Hadopelagia",
+            "species": "Hadopelagia pelagica"
+          },
+          "ASV_17": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Alphaproteobacteria",
+            "order": "Rhodospirillales",
+            "family": "Pelagibacteraceae",
+            "genus": "Hadopelagia",
+            "species": "Hadopelagia pelagica"
+          },
+          "ASV_19": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Gammaproteobacteria",
+            "order": "Pseudomonadales",
+            "family": "Pseudomonadaceae",
+            "genus": "Marianobacter",
+            "species": "Marianobacter marina"
+          },
+          "ASV_20": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Gammaproteobacteria",
+            "order": "Vibrionales",
+            "family": "Vibrionaceae",
+            "genus": "Trenchia",
+            "species": "Trenchia stellaris"
+          },
+          "ASV_3": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Gammaproteobacteria",
+            "order": "Alteromonadales",
+            "family": "Alteromonadaceae",
+            "genus": "Bathycella",
+            "species": "Bathycella profunda"
+          },
+          "ASV_16": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Gammaproteobacteria",
+            "order": "Oceanospirillales",
+            "family": "Alcanivoracaceae",
+            "genus": "Abyssalbacter",
+            "species": "Abyssalbacter abyssi"
+          },
+          "ASV_4": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Gammaproteobacteria",
+            "order": "Pseudomonadales",
+            "family": "Pseudomonadaceae",
+            "genus": "Marianobacter",
+            "species": "Marianobacter marina"
+          },
+          "ASV_11": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Gammaproteobacteria",
+            "order": "Oceanospirillales",
+            "family": "Alcanivoracaceae",
+            "genus": "Abyssalbacter",
+            "species": "Abyssalbacter abyssi"
+          },
+          "ASV_10": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Gammaproteobacteria",
+            "order": "Vibrionales",
+            "family": "Vibrionaceae",
+            "genus": "Trenchia",
+            "species": "Trenchia stellaris"
+          },
+          "ASV_8": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Gammaproteobacteria",
+            "order": "Alteromonadales",
+            "family": "Alteromonadaceae",
+            "genus": "Bathycella",
+            "species": "Bathycella profunda"
+          },
+          "ASV_9": {
+            "domain": "Bacteria",
+            "phylum": "Proteobacteria",
+            "class": "Gammaproteobacteria",
+            "order": "Pseudomonadales",
+            "family": "Pseudomonadaceae",
+            "genus": "Marianobacter",
+            "species": "Marianobacter marina"
+          }
+        },
+        "confidence_scores": {
+          "ASV_24": 1.0,
+          "ASV_23": 1.0,
+          "ASV_12": 1.0,
+          "ASV_1": 1.0,
+          "ASV_15": 1.0,
+          "ASV_22": 1.0,
+          "ASV_21": 1.0,
+          "ASV_14": 1.0,
+          "ASV_2": 1.0,
+          "ASV_5": 1.0,
+          "ASV_25": 1.0,
+          "ASV_18": 1.0,
+          "ASV_6": 1.0,
+          "ASV_13": 1.0,
+          "ASV_7": 1.0,
+          "ASV_17": 1.0,
+          "ASV_19": 1.0,
+          "ASV_20": 1.0,
+          "ASV_3": 1.0,
+          "ASV_16": 1.0,
+          "ASV_4": 1.0,
+          "ASV_11": 1.0,
+          "ASV_10": 1.0,
+          "ASV_8": 1.0,
+          "ASV_9": 1.0
+        },
+        "taxonomy_file": "results/abyssal_sample-9/taxonomy.json",
+        "detailed_file": "results/abyssal_sample-9/taxonomic_assignments.csv",
+        "summary_file": "results/abyssal_sample-9/taxonomy_summary.json",
+        "phylum_distribution": {
+          "Proteobacteria": 25
+        },
+        "classification_method": "blast, kmer",
+        "mean_confidence": 100.0,
+        "classification_summary": {
+          "total_sequences": 25,
+          "mean_confidence": 100.0,
+          "median_confidence": 100.0,
+          "taxonomic_diversity": {
+            "kingdom": {
+              "Bacteria": 25
+            },
+            "phylum": {
+              "Proteobacteria": 25
+            },
+            "class": {
+              "Gammaproteobacteria": 20,
+              "Alphaproteobacteria": 5
+            },
+            "order": {
+              "Pseudomonadales": 5,
+              "Alteromonadales": 5,
+              "Rhodospirillales": 5,
+              "Oceanospirillales": 5,
+              "Vibrionales": 5
+            },
+            "family": {
+              "Pseudomonadaceae": 5,
+              "Alteromonadaceae": 5,
+              "Pelagibacteraceae": 5,
+              "Alcanivoracaceae": 5,
+              "Vibrionaceae": 5
+            },
+            "genus": {
+              "Marianobacter": 5,
+              "Bathycella": 5,
+              "Hadopelagia": 5,
+              "Abyssalbacter": 5,
+              "Trenchia": 5
+            },
+            "species": {
+              "Marianobacter marina": 5,
+              "Bathycella profunda": 5,
+              "Hadopelagia pelagica": 5,
+              "Abyssalbacter abyssi": 5,
+              "Trenchia stellaris": 5
+            }
+          },
+          "classification_success_rates": {
+            "kingdom": 100.0,
+            "phylum": 100.0,
+            "class": 100.0,
+            "order": 100.0,
+            "family": 100.0,
+            "genus": 100.0,
+            "species": 100.0
+          }
+        }
+      }
+    },
+    {
+      "step": "abundance_quantification",
+      "status": "completed",
+      "results": {
+        "total_reads": 25,
+        "total_asvs": 25,
+        "diversity_metrics": {
+          "richness": {
+            "sample": 25
+          },
+          "shannon": {
+            "sample": 3.2188758248682
+          },
+          "simpson": {
+            "sample": 0.96
+          },
+          "chao1": {
+            "sample": 325.0
+          }
+        },
+        "taxonomic_summary": {
+          "domain": {
+            "Bacteria": 25
+          },
+          "phylum": {
+            "Proteobacteria": 25
+          },
+          "class": {
+            "Gammaproteobacteria": 20,
+            "Alphaproteobacteria": 5
+          },
+          "order": {
+            "Oceanospirillales": 5,
+            "Rhodospirillales": 5,
+            "Alteromonadales": 5,
+            "Pseudomonadales": 5,
+            "Vibrionales": 5
+          },
+          "family": {
+            "Alcanivoracaceae": 5,
+            "Pelagibacteraceae": 5,
+            "Alteromonadaceae": 5,
+            "Pseudomonadaceae": 5,
+            "Vibrionaceae": 5
+          },
+          "genus": {
+            "Abyssalbacter": 5,
+            "Hadopelagia": 5,
+            "Bathycella": 5,
+            "Marianobacter": 5,
+            "Trenchia": 5
+          },
+          "species": {
+            "Abyssalbacter abyssi": 5,
+            "Hadopelagia pelagica": 5,
+            "Bathycella profunda": 5,
+            "Marianobacter marina": 5,
+            "Trenchia stellaris": 5
+          }
+        },
+        "abundance_file": "results/abyssal_sample-9/abundance_matrix.csv",
+        "normalized_file": "results/abyssal_sample-9/normalized_abundance.csv",
+        "diversity_file": "results/abyssal_sample-9/diversity_metrics.csv",
+        "taxonomic_file": "results/abyssal_sample-9/taxonomic_abundance.json"
+      }
+    },
+    {
+      "step": "report_generation",
+      "status": "completed",
+      "results": {
+        "report_file": "results/abyssal_sample-9/sample_report.html",
+        "report_format": "html"
+      }
+    }
+  ]
+}

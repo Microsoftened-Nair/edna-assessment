@@ -1,0 +1,75 @@
+# Default configuration for AI-driven deep-sea eDNA analysis pipeline
+
+# Data preprocessing settings
+preprocessing:
+  quality_threshold: 20
+  min_length: 100
+  max_length: 2000
+  max_expected_errors: 2
+  trim_primers: true
+  remove_chimeras: true
+  denoise_method: "dada2"  # or "deblur"
+
+# Feature engineering settings
+feature_engineering:
+  kmer_size: [3, 4, 5, 6]
+  use_composition: true
+  use_embeddings: true
+  embedding_dim: 128
+  max_sequence_length: 1000
+  use_scaling: true
+  scaling_method: "standard"  # "standard" or "minmax"
+  use_feature_selection: false
+  feature_selection_k: 1000
+  use_dimensionality_reduction: false
+  n_components: 50
+
+# Model settings
+models:
+  supervised:
+    model_type: "ensemble"  # "cnn", "lstm", "transformer", "ensemble"
+    batch_size: 32
+    epochs: 100
+    learning_rate: 0.001
+    dropout: 0.3
+    use_gpu: true
+  unsupervised:
+    clustering_method: "hdbscan"  # "hdbscan", "dbscan", "kmeans"
+    min_cluster_size: 10
+    dimensionality_reduction: "umap"  # "umap", "tsne", "pca"
+    n_components: 50
+
+# Taxonomy settings
+taxonomy:
+  confidence_threshold: 0.7
+  hierarchical_levels: ["domain", "phylum", "class", "order", "family", "genus", "species"]
+  novel_taxa_threshold: 0.5
+
+# Abundance settings
+abundance:
+  normalization_method: "rarefaction"  # "rarefaction", "relative", "tpm"
+  rarefaction_depth: 10000
+  calculate_diversity: true
+  diversity_metrics: ["shannon", "simpson", "chao1"]
+
+# Visualization settings
+visualization:
+  plot_format: "png"
+  dpi: 300
+  figure_size: [12, 8]
+  color_palette: "viridis"
+  interactive: true
+
+# Computational settings
+computational:
+  n_jobs: -1  # -1 for all available cores
+  use_gpu: true
+  memory_limit: "16GB"
+  chunk_size: 1000
+
+# Output settings
+output:
+  save_intermediate: true
+  output_formats: ["csv", "json", "hdf5"]
+  generate_report: true
+  log_level: "INFO"

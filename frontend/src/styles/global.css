@@ -1,0 +1,56 @@
+:root {
+  color-scheme: dark;
+  --bg-primary: #0b1324;
+  --bg-secondary: #111c33;
+  --bg-elevated: #182642;
+  --accent: #2be38b;
+  --accent-soft: rgba(43, 227, 139, 0.12);
+  --accent-strong: #11c770;
+  --text-primary: #f5f7fb;
+  --text-secondary: #c8d3eb;
+  --text-muted: #8591ac;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.35);
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --transition-base: 0.22s cubic-bezier(0.25, 0.1, 0.25, 1);
+  --font-family: "Inter", "Segoe UI", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background: radial-gradient(circle at top left, rgba(43, 227, 139, 0.08), transparent 40%),
+    radial-gradient(circle at bottom right, rgba(43, 227, 139, 0.05), transparent 35%),
+    var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}

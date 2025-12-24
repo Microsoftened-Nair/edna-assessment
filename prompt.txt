@@ -1,0 +1,359 @@
+<project_prompt>
+  <project_title>AI-Driven Deep-Sea eDNA Analysis Pipeline for Eukaryotic Biodiversity Assessment</project_title>
+  
+  <project_overview>
+    <background>
+      You are tasked with developing an innovative bioinformatics pipeline that uses artificial intelligence and machine learning to analyze environmental DNA (eDNA) from deep-sea ecosystems. The deep ocean harbors vast unexplored biodiversity, but traditional database-dependent methods fail to accurately identify novel or poorly-represented deep-sea eukaryotic organisms. This project aims to create a solution that can classify sequences, annotate taxa, and estimate abundance directly from raw eDNA reads with minimal reliance on incomplete reference databases.
+    </background>
+    
+    <key_challenges>
+      <challenge id="1">Poor representation of deep-sea organisms in existing reference databases (SILVA, PR2, NCBI)</challenge>
+      <challenge id="2">High computational time requirements for traditional eDNA processing pipelines</challenge>
+      <challenge id="3">Misclassification and unassigned reads due to database dependency</challenge>
+      <challenge id="4">Need to discover novel taxa without pre-existing reference sequences</challenge>
+      <challenge id="5">Accurate biodiversity assessment in under-studied deep-sea ecosystems</challenge>
+    </key_challenges>
+    
+    <target_markers>
+      <marker>18S rRNA gene sequences</marker>
+      <marker>COI (Cytochrome Oxidase I) sequences</marker>
+    </target_markers>
+    
+    <target_organisms>
+      <group>Protists</group>
+      <group>Cnidarians</group>
+      <group>Rare metazoans</group>
+      <group>Novel deep-sea eukaryotes</group>
+    </target_organisms>
+  </project_overview>
+
+  <technical_requirements>
+    <core_functionalities>
+      <functionality id="1">
+        <name>Sequence Classification</name>
+        <description>Classify raw eDNA reads into eukaryotic taxonomic groups using deep learning models that can recognize patterns beyond exact database matches</description>
+        <methods>
+          <method>Convolutional Neural Networks (CNNs) for sequence pattern recognition</method>
+          <method>Recurrent Neural Networks (RNNs/LSTMs) for sequential DNA data processing</method>
+          <method>Transformer-based models for long-range sequence dependencies</method>
+          <method>k-mer based feature extraction and embedding</method>
+        </methods>
+      </functionality>
+      
+      <functionality id="2">
+        <name>Taxonomic Annotation</name>
+        <description>Assign taxonomic labels to classified sequences, including confidence scores and hierarchical taxonomy (domain, phylum, class, order, family, genus, species where possible)</description>
+        <approaches>
+          <approach>Multi-label classification for hierarchical taxonomy</approach>
+          <approach>Transfer learning from well-represented taxa to poorly-represented ones</approach>
+          <approach>Similarity-based clustering for novel taxa identification</approach>
+          <approach>Confidence scoring to flag uncertain or potentially novel sequences</approach>
+        </approaches>
+      </functionality>
+      
+      <functionality id="3">
+        <name>Abundance Estimation</name>
+        <description>Quantify relative abundance of detected taxa from read counts, normalized appropriately</description>
+        <requirements>
+          <requirement>Read count normalization methods</requirement>
+          <requirement>Rarefaction curves for sampling depth assessment</requirement>
+          <requirement>Abundance tables at multiple taxonomic levels</requirement>
+          <requirement>Statistical measures of diversity (alpha and beta diversity)</requirement>
+        </requirements>
+      </functionality>
+      
+      <functionality id="4">
+        <name>Novel Taxa Discovery</name>
+        <description>Identify and flag sequences that likely represent novel or undescribed eukaryotic taxa</description>
+        <techniques>
+          <technique>Unsupervised clustering (e.g., UMAP, t-SNE, autoencoders) to group similar sequences</technique>
+          <technique>Outlier detection algorithms to identify divergent sequences</technique>
+          <technique>Distance-based metrics to assess novelty relative to known taxa</technique>
+          <technique>Phylogenetic placement of novel sequences on reference trees</technique>
+        </techniques>
+      </functionality>
+      
+      <functionality id="5">
+        <name>Computational Efficiency</name>
+        <description>Optimize pipeline to reduce processing time compared to traditional methods</description>
+        <optimizations>
+          <optimization>GPU acceleration for deep learning models</optimization>
+          <optimization>Parallel processing for batch sequence analysis</optimization>
+          <optimization>Efficient data structures and algorithms</optimization>
+          <optimization>Pre-trained model deployment to avoid retraining</optimization>
+        </optimizations>
+      </functionality>
+    </core_functionalities>
+
+    <pipeline_architecture>
+      <stage id="1">
+        <name>Data Preprocessing</name>
+        <tasks>
+          <task>Quality filtering of raw sequencing reads</task>
+          <task>Adapter and primer trimming</task>
+          <task>Chimera detection and removal</task>
+          <task>Length filtering based on target markers</task>
+          <task>Denoising and error correction (ASV/OTU generation)</task>
+        </tasks>
+        <tools_suggestion>DADA2, Cutadapt, or custom preprocessing modules</tools_suggestion>
+      </stage>
+      
+      <stage id="2">
+        <name>Feature Engineering</name>
+        <tasks>
+          <task>k-mer frequency extraction (e.g., k=3-9 for DNA)</task>
+          <task>One-hot encoding or embedding of DNA sequences</task>
+          <task>Sequence composition analysis (GC content, di-nucleotide frequencies)</task>
+          <task>Dimensionality reduction if needed</task>
+        </tasks>
+      </stage>
+      
+      <stage id="3">
+        <name>AI Model Training/Application</name>
+        <supervised_learning>
+          <description>Train classification models on available reference sequences from NCBI, SILVA, PR2</description>
+          <model_types>
+            <model>CNN-based classifiers for local sequence patterns</model>
+            <model>LSTM/GRU networks for sequence dependencies</model>
+            <model>Transformer models (e.g., BERT-style for genomics)</model>
+            <model>Ensemble methods combining multiple architectures</model>
+          </model_types>
+          <training_strategy>
+            <strategy>Use data augmentation to expand training set (mutations, reverse complements)</strategy>
+            <strategy>Implement hierarchical classification (predict taxonomy level by level)</strategy>
+            <strategy>Apply class weighting to handle imbalanced taxonomic representation</strategy>
+            <strategy>Use transfer learning from well-represented to poorly-represented groups</strategy>
+          </training_strategy>
+        </supervised_learning>
+        
+        <unsupervised_learning>
+          <description>Cluster sequences to discover novel taxa and reduce database dependency</description>
+          <clustering_methods>
+            <method>Deep autoencoders for feature learning and dimensionality reduction</method>
+            <method>Variational Autoencoders (VAEs) for generative modeling</method>
+            <method>Self-organizing maps (SOMs) for visualization</method>
+            <method>DBSCAN or HDBSCAN for density-based clustering</method>
+            <method>Graph-based clustering using sequence similarity networks</method>
+          </clustering_methods>
+        </unsupervised_learning>
+        
+        <hybrid_approach>
+          <description>Combine supervised classification for known taxa with unsupervised discovery for novel sequences</description>
+          <workflow>
+            <step>Apply supervised model to classify sequences with high confidence</step>
+            <step>Flag low-confidence predictions for further analysis</step>
+            <step>Apply unsupervised clustering to unclassified/low-confidence sequences</step>
+            <step>Identify novel taxonomic units (nOTUs) as cluster representatives</step>
+          </workflow>
+        </hybrid_approach>
+      </stage>
+      
+      <stage id="4">
+        <name>Taxonomic Assignment and Annotation</name>
+        <tasks>
+          <task>Generate taxonomic labels with confidence scores</task>
+          <task>Create hierarchical taxonomy tables</task>
+          <task>Flag novel or uncertain assignments</task>
+          <task>Generate phylogenetic trees or networks where applicable</task>
+          <task>Cross-reference with existing databases for validation</task>
+        </tasks>
+      </stage>
+      
+      <stage id="5">
+        <name>Abundance Quantification</name>
+        <tasks>
+          <task>Calculate read counts per taxonomic unit</task>
+          <task>Normalize abundance data (e.g., relative abundance, TPM-like normalization)</task>
+          <task>Generate abundance matrices at different taxonomic levels</task>
+          <task>Calculate diversity indices (Shannon, Simpson, Chao1, etc.)</task>
+          <task>Perform rarefaction analysis</task>
+        </tasks>
+      </stage>
+      
+      <stage id="6">
+        <name>Visualization and Reporting</name>
+        <outputs>
+          <output>Taxonomic composition bar plots and heatmaps</output>
+          <output>Diversity metrics and rarefaction curves</output>
+          <output>PCA/NMDS ordination plots for community comparison</output>
+          <output>Phylogenetic trees with novel taxa highlighted</output>
+          <output>Interactive dashboards for exploration</output>
+          <output>Summary reports with biodiversity statistics</output>
+          <output>Lists of novel taxa candidates for further investigation</output>
+        </outputs>
+      </stage>
+    </pipeline_architecture>
+
+    <data_specifications>
+      <input_data>
+        <format>Raw paired-end or single-end Illumina sequencing reads (FASTQ)</format>
+        <markers>18S rRNA, COI, or other eukaryotic markers</markers>
+        <source>Water and sediment samples from deep-sea environments</source>
+        <expected_volume>High-throughput sequencing data (millions of reads per sample)</expected_volume>
+      </input_data>
+      
+      <reference_data>
+        <database>NCBI BLAST databases (available at: https://ftp.ncbi.nlm.nih.gov/blast/db/)</database>
+        <database>SILVA rRNA database</database>
+        <database>PR2 database (Protist Ribosomal Reference)</database>
+        <usage>For initial model training and validation, but minimize dependency in final pipeline</usage>
+      </reference_data>
+      
+      <output_data>
+        <file>Taxonomic classification table with confidence scores</file>
+        <file>Abundance matrix (samples × taxa)</file>
+        <file>Diversity metrics summary</file>
+        <file>Novel taxa report with representative sequences</file>
+        <file>Visualization plots and figures</file>
+        <file>Log files documenting processing steps and parameters</file>
+      </output_data>
+    </data_specifications>
+  </technical_requirements>
+
+  <implementation_guidelines>
+    <programming_languages>
+      <language priority="primary">Python (for ML/DL models, data processing, visualization)</language>
+      <language priority="secondary">R (for ecological statistics and specialized biodiversity analyses)</language>
+      <language priority="optional">Bash/Shell scripting (for pipeline automation)</language>
+    </programming_languages>
+    
+    <key_libraries>
+      <category name="Deep Learning">
+        <library>TensorFlow or PyTorch (neural network frameworks)</library>
+        <library>Keras (high-level API)</library>
+        <library>Scikit-learn (traditional ML, preprocessing)</library>
+      </category>
+      
+      <category name="Bioinformatics">
+        <library>Biopython (sequence handling, file I/O)</library>
+        <library>DADA2 or Deblur (ASV generation)</library>
+        <library>BLAST+ (optional, for database searches)</library>
+        <library>VSEARCH (sequence clustering and searching)</library>
+      </category>
+      
+      <category name="Data Processing">
+        <library>NumPy, Pandas (data manipulation)</library>
+        <library>Polars (efficient data processing alternative)</library>
+        <library>Dask (parallel computing for large datasets)</library>
+      </category>
+      
+      <category name="Clustering and Dimensionality Reduction">
+        <library>UMAP, t-SNE (visualization)</library>
+        <library>HDBSCAN (clustering)</library>
+        <library>Scikit-learn clustering modules</library>
+      </category>
+      
+      <category name="Visualization">
+        <library>Matplotlib, Seaborn (static plots)</library>
+        <library>Plotly (interactive visualizations)</library>
+        <library>ETE3 or Biopython.Phylo (phylogenetic trees)</library>
+      </category>
+      
+      <category name="Ecological Analysis">
+        <library>Scikit-bio (diversity metrics, ordination)</library>
+        <library>Vegan (R package for community ecology)</library>
+      </category>
+    </key_libraries>
+
+    <model_development_strategy>
+      <phase name="Phase 1: Baseline Model">
+        <objective>Develop initial classification model using available reference databases</objective>
+        <steps>
+          <step>Download and curate training data from NCBI, SILVA, PR2</step>
+          <step>Preprocess sequences (quality control, length filtering)</step>
+          <step>Extract k-mer features or create sequence embeddings</step>
+          <step>Train baseline CNN or LSTM classifier</step>
+          <step>Evaluate performance on test set (accuracy, F1-score per taxonomic level)</step>
+        </steps>
+      </phase>
+      
+      <phase name="Phase 2: Unsupervised Component">
+        <objective>Implement clustering for novel taxa discovery</objective>
+        <steps>
+          <step>Train autoencoder for sequence feature extraction</step>
+          <step>Apply dimensionality reduction (UMAP/t-SNE)</step>
+          <step>Perform clustering on embedded sequences</step>
+          <step>Validate clusters against known taxonomy where possible</step>
+          <step>Develop metrics for novelty assessment</step>
+        </steps>
+      </phase>
+      
+      <phase name="Phase 3: Integration and Optimization">
+        <objective>Combine supervised and unsupervised approaches into unified pipeline</objective>
+        <steps>
+          <step>Implement decision logic for routing sequences (high vs. low confidence)</step>
+          <step>Optimize hyperparameters across entire pipeline</step>
+          <step>Implement GPU acceleration and parallel processing</step>
+          <step>Benchmark computational time against traditional methods</step>
+        </steps>
+      </phase>
+      
+      <phase name="Phase 4: Validation and Testing">
+        <objective>Validate pipeline on real deep-sea eDNA samples</objective>
+        <steps>
+          <step>Process CMLRE samples through pipeline</step>
+          <step>Compare results with traditional methods (QIIME2, mothur)</step>
+          <step>Analyze novel taxa candidates</step>
+          <step>Generate biodiversity assessment reports</step>
+          <step>Collect user feedback and iterate</step>
+        </steps>
+      </phase>
+    </model_development_strategy>
+
+    <evaluation_metrics>
+      <classification_performance>
+        <metric>Accuracy at each taxonomic level (phylum, class, order, family, genus, species)</metric>
+        <metric>Precision, Recall, F1-score per taxon</metric>
+        <metric>Confusion matrices</metric>
+        <metric>Percentage of successfully classified vs. unclassified reads</metric>
+      </classification_performance>
+      
+      <novelty_detection>
+        <metric>Number of novel clusters identified</metric>
+        <metric>Distinctness of novel clusters (silhouette scores, within-cluster variance)</metric>
+        <metric>Validation against existing databases (% truly novel)</metric>
+      </novelty_detection>
+      
+      <computational_efficiency>
+        <metric>Total processing time per sample</metric>
+        <metric>Memory usage</metric>
+        <metric>Speedup factor vs. traditional pipelines</metric>
+      </computational_efficiency>
+      
+      <ecological_relevance>
+        <metric>Biodiversity indices calculated (Shannon, Simpson, Chao1)</metric>
+        <metric>Rarefaction curves</metric>
+        <metric>Beta diversity between samples</metric>
+        <metric>Comparison with morphological or other independent biodiversity assessments</metric>
+      </ecological_relevance>
+    </evaluation_metrics>
+  </implementation_guidelines>
+
+  <deliverables>
+    <deliverable priority="critical">
+      <name>Functional AI Pipeline</name>
+      <description>Complete, documented, and tested bioinformatics pipeline capable of processing raw eDNA reads through to taxonomic classification, abundance estimation, and novel taxa identification</description>
+      <format>Python package or modular scripts with clear README and usage instructions</format>
+    </deliverable>
+    
+    <deliverable priority="critical">
+      <name>Trained AI Models</name>
+      <description>Pre-trained deep learning models (classification and feature extraction) ready for deployment</description>
+      <format>Model files (HDF5, PyTorch .pt, or TensorFlow SavedModel format) with metadata</format>
+    </deliverable>
+    
+    <deliverable priority="critical">
+      <name>Analysis Results</name>
+      <description>Processed output from CMLRE deep-sea samples including taxonomic tables, abundance matrices, diversity metrics, and novel taxa reports</description>
+      <format>CSV/TSV files, JSON structured data, and visualization figures</format>
+    </deliverable>
+    
+    <deliverable priority="high">
+      <name>Documentation</name>
+      <description>Comprehensive documentation including installation guide, user manual, API reference, and troubleshooting guide</description>
+      <format>Markdown files, HTML documentation (Sphinx), or PDF</format>
+    </deliverable>
+    
+    <deliverable priority="high">
+      <name>Validation Report</name>
+      <description>Technical report comparing pipeline performance against traditional methods, including accuracy metrics, computational benchmark

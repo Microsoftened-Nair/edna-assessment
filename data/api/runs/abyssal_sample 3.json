@@ -1,0 +1,185 @@
+{
+  "sample_id": "abyssal_sample 3",
+  "input_type": "single",
+  "input_files": [
+    "/home/megh/edna/data/api/uploads/fd13f6fe65e740d886266a7993ffb704_sample_single_02.fastq"
+  ],
+  "output_dir": "results/abyssal_sample 3",
+  "start_time": "2025-09-30T17:37:09.645855",
+  "end_time": "2025-09-30T17:37:09.893034",
+  "processing_time": 0.247179,
+  "success": true,
+  "error": null,
+  "status": "completed",
+  "pipeline_steps": [
+    {
+      "step": "preprocessing",
+      "status": "completed",
+      "results": {
+        "sample_id": "abyssal_sample 3",
+        "input_file": "/home/megh/edna/data/api/uploads/fd13f6fe65e740d886266a7993ffb704_sample_single_02.fastq",
+        "output_dir": "results/abyssal_sample 3/abyssal_sample 3",
+        "processing_steps": [
+          {
+            "step": "quality_control",
+            "input_sequences": 25,
+            "output_sequences": 25,
+            "output_file": "results/abyssal_sample 3/abyssal_sample 3/filtered.fastq"
+          },
+          {
+            "step": "denoising",
+            "method": "DenoiseDADA2",
+            "input_sequences": 25,
+            "output_asvs": 0,
+            "output_file": "results/abyssal_sample 3/abyssal_sample 3/asvs.fasta",
+            "abundance_table": {}
+          },
+          {
+            "step": "chimera_removal",
+            "input_asvs": 0,
+            "output_asvs": 0,
+            "chimeric_asvs": 0,
+            "output_file": "results/abyssal_sample 3/abyssal_sample 3/asvs_no_chimeras.fasta",
+            "abundance_table": {}
+          }
+        ],
+        "final_asvs": 0,
+        "final_asv_file": "results/abyssal_sample 3/abyssal_sample 3/asvs_no_chimeras.fasta",
+        "abundance_table": {},
+        "success": true,
+        "abundance_file": "results/abyssal_sample 3/abyssal_sample 3/abundance_table.txt",
+        "summary_stats": {
+          "sample_id": "abyssal_sample 3",
+          "total_processing_steps": 3,
+          "final_asvs": 0,
+          "quality_control_input": 25,
+          "quality_control_output": 25,
+          "denoising_input": 25,
+          "denoising_output": 0,
+          "chimera_removal_output": 0
+        },
+        "log_file": "results/abyssal_sample 3/abyssal_sample 3/preprocessing_log.txt"
+      }
+    },
+    {
+      "step": "feature_extraction",
+      "status": "completed",
+      "results": {
+        "total_asvs": 0,
+        "feature_types": [
+          "kmer_3",
+          "kmer_4",
+          "kmer_5",
+          "kmer_6",
+          "kmer_combined",
+          "composition",
+          "structural",
+          "one_hot",
+          "embeddings"
+        ],
+        "feature_shapes": {
+          "kmer_3": [
+            0,
+            64
+          ],
+          "kmer_4": [
+            0,
+            256
+          ],
+          "kmer_5": [
+            0,
+            1024
+          ],
+          "kmer_6": [
+            0,
+            4096
+          ],
+          "kmer_combined": [
+            0,
+            5440
+          ],
+          "composition": [
+            0
+          ],
+          "structural": [
+            0
+          ],
+          "one_hot": [
+            0,
+            1000,
+            4
+          ],
+          "embeddings": [
+            0
+          ]
+        },
+        "recommended_features": [
+          "composition",
+          "structural",
+          "one_hot"
+        ],
+        "statistics_file": "results/abyssal_sample 3/feature_statistics.txt",
+        "features_file": "results/abyssal_sample 3/features.pkl"
+      }
+    },
+    {
+      "step": "taxonomic_classification",
+      "status": "completed",
+      "results": {
+        "total_classified": 0,
+        "taxonomy": {},
+        "confidence_scores": {},
+        "taxonomy_file": "results/abyssal_sample 3/taxonomy.json",
+        "detailed_file": "results/abyssal_sample 3/taxonomic_assignments.csv",
+        "summary_file": "results/abyssal_sample 3/taxonomy_summary.json",
+        "phylum_distribution": {},
+        "classification_method": "blast, kmer",
+        "mean_confidence": 0.0,
+        "classification_summary": {}
+      }
+    },
+    {
+      "step": "abundance_quantification",
+      "status": "completed",
+      "results": {
+        "total_reads": 0,
+        "total_asvs": 0,
+        "diversity_metrics": {
+          "shannon": {
+            "sample": 0.0
+          },
+          "simpson": {
+            "sample": 0.0
+          },
+          "chao1": {
+            "sample": 0.0
+          },
+          "richness": {
+            "sample": 0.0
+          }
+        },
+        "taxonomic_summary": {
+          "domain": {},
+          "phylum": {},
+          "class": {},
+          "order": {},
+          "family": {},
+          "genus": {},
+          "species": {}
+        },
+        "abundance_file": "results/abyssal_sample 3/abundance_matrix.csv",
+        "normalized_file": "results/abyssal_sample 3/normalized_abundance.csv",
+        "diversity_file": "results/abyssal_sample 3/diversity_metrics.csv",
+        "taxonomic_file": "results/abyssal_sample 3/taxonomic_abundance.json"
+      }
+    },
+    {
+      "step": "report_generation",
+      "status": "completed",
+      "results": {
+        "report_file": "results/abyssal_sample 3/sample_report.html",
+        "report_format": "html"
+      }
+    }
+  ]
+}

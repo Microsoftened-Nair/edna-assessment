@@ -1,0 +1,29 @@
+{
+  "single": [
+    {
+      "sample_id": "sample_single_01",
+      "file": "/home/megh/edna/data/demo_fastq/sample_single_01.fastq"
+    },
+    {
+      "sample_id": "sample_single_02",
+      "file": "/home/megh/edna/data/demo_fastq/sample_single_02.fastq"
+    }
+  ],
+  "paired": [
+    {
+      "sample_id": "sample_paired_01",
+      "forward": "/home/megh/edna/data/demo_fastq/sample_paired_01_R1.fastq",
+      "reverse": "/home/megh/edna/data/demo_fastq/sample_paired_01_R2.fastq"
+    },
+    {
+      "sample_id": "sample_paired_02",
+      "forward": "/home/megh/edna/data/demo_fastq/sample_paired_02_R1.fastq",
+      "reverse": "/home/megh/edna/data/demo_fastq/sample_paired_02_R2.fastq"
+    },
+    {
+      "sample_id": "sample_paired_03",
+      "forward": "/home/megh/edna/data/demo_fastq/sample_paired_03_R1.fastq",
+      "reverse": "/home/megh/edna/data/demo_fastq/sample_paired_03_R2.fastq"
+    }
+  ]
+}

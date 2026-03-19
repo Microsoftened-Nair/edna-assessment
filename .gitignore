@@ -3,6 +3,9 @@ databases/
 demo_databases/
 results/
 *.log
+names.dmp
+nodes.dmp
+taxdump.tar.gz
 
 # Virtual Environments
 virt/

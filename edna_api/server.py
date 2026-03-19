@@ -10,10 +10,13 @@ from typing import Any, Dict, List, Optional
 
 from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 
 from edna_pipeline.database_manager import DatabaseManager
 from edna_pipeline.pipeline import DeepSeaEDNAPipeline
+from edna_api.database import init_db, User
 
 BASE_DATA_DIR = Path("data/api")
 RUNS_DIR = BASE_DATA_DIR / "runs"
@@ -437,6 +440,13 @@ class DatabaseTaskManager:
 def create_app(db_dir: str | None = None) -> Flask:
     app = Flask(__name__)
     CORS(app)
+    
+    # Configure JWT
+    app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY", "dev-super-secret-key-change-in-prod")
+    jwt = JWTManager(app)
+    
+    # Configure DB
+    init_db(app)
 
     database_root = db_dir or DEFAULT_DB_DIR
 
@@ -539,13 +549,27 @@ def create_app(db_dir: str | None = None) -> Flask:
         logger.info("Uploaded FASTQ file %s to %s", filename, save_path)
         return jsonify(payload), 201
 
+    @app.post("/api/auth/login")
+    def login():
+        data = request.get_json(silent=True) or {}
+        username = data.get("username")
+        password = data.get("password")
+        
+        user = User.query.filter_by(username=username).first()
+        if user and check_password_hash(user.password_hash, password):
+            access_token = create_access_token(identity=username)
+            return jsonify(access_token=access_token), 200
+        return jsonify({"msg": "Bad username or password"}), 401
+
     @app.get("/api/runs/recent")
+    @jwt_required()
     def recent_runs() -> Any:
         runs = run_manager.list_recent()
         logger.info("Recent runs requested: count=%s", len(runs))
         return jsonify(runs)
 
     @app.get("/api/runs/<run_id>")
+    @jwt_required()
     def run_detail(run_id: str) -> Any:
         run = run_manager.get(run_id)
         if not run:
@@ -553,6 +577,7 @@ def create_app(db_dir: str | None = None) -> Flask:
         return jsonify(run)
 
     @app.post("/api/runs")
+    @jwt_required()
     def trigger_run() -> Any:
         payload = request.get_json(silent=True) or {}
         try:
@@ -563,6 +588,7 @@ def create_app(db_dir: str | None = None) -> Flask:
         return jsonify(run), 202
 
     @app.post("/api/runs/batch")
+    @jwt_required()
     def trigger_batch() -> Any:
         payload = request.get_json(silent=True) or {}
         try:
@@ -573,6 +599,7 @@ def create_app(db_dir: str | None = None) -> Flask:
         return jsonify(batch), 202
 
     @app.get("/api/runs/batch/<batch_id>")
+    @jwt_required()
     def batch_detail(batch_id: str) -> Any:
         batch = batch_manager.get(batch_id)
         if not batch:
@@ -580,10 +607,12 @@ def create_app(db_dir: str | None = None) -> Flask:
         return jsonify(batch)
 
     @app.get("/api/databases")
+    @jwt_required()
     def list_databases() -> Any:
         return jsonify(database_tasks.list_databases())
 
     @app.post("/api/databases/<name>/download")
+    @jwt_required()
     def download_database(name: str) -> Any:
         try:
             database_tasks.start_download(name)
@@ -592,6 +621,7 @@ def create_app(db_dir: str | None = None) -> Flask:
         return jsonify(next((db for db in database_tasks.list_databases() if db["name"] == name), {"name": name}))
 
     @app.post("/api/databases/<name>/cancel")
+    @jwt_required()
     def cancel_database(name: str) -> Any:
         try:
             database_tasks.cancel_download(name)

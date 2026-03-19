@@ -1,176 +1,211 @@
-# AI-Driven Deep-Sea eDNA Analysis Pipeline for Eukaryotic Biodiversity Assessment
+# Deep-Sea eDNA Pipeline
 
-## Project Overview
+End-to-end toolkit for analyzing environmental DNA (eDNA) sequencing data from marine/deep-sea samples.
 
-This project implements an innovative bioinformatics pipeline that uses artificial intelligence and machine learning to analyze environmental DNA (eDNA) from deep-sea ecosystems. The pipeline addresses the challenge of accurately identifying novel or poorly-represented deep-sea eukaryotic organisms by minimizing reliance on incomplete reference databases.
+The repository includes:
 
-## Key Features
+- A Python analysis pipeline (`edna_pipeline/`) for preprocessing reads, assigning taxonomy, and generating abundance/diversity outputs.
+- A Flask API (`edna_api/`) to run jobs and monitor status programmatically.
+- A React dashboard (`frontend/`) to operate the pipeline visually.
 
-- **AI-Powered Classification**: Deep learning models (CNNs, LSTMs, Transformers) for sequence pattern recognition
-- **Novel Taxa Discovery**: Unsupervised clustering to identify potentially new species
-- **Hierarchical Taxonomy**: Multi-level taxonomic classification with confidence scores
-- **Computational Efficiency**: GPU acceleration and parallel processing
-- **Comprehensive Analysis**: Abundance estimation, diversity metrics, and biodiversity assessment
+## What This Project Does (Plain Language)
 
-## Target Applications
+Think of seawater or sediment as a "DNA soup." Organisms leave behind tiny bits of DNA. This project takes those DNA reads (FASTQ files) and:
 
-- **Markers**: 18S rRNA and COI gene sequences
-- **Organisms**: Protists, Cnidarians, rare metazoans, novel deep-sea eukaryotes
-- **Ecosystems**: Deep-sea water and sediment samples
+1. Cleans and denoises the reads.
+2. Groups similar reads into ASVs (Amplicon Sequence Variants).
+3. Compares sequences to reference databases (BLAST + k-mer methods).
+4. Estimates what organisms are present, with confidence scores.
+5. Produces summary files you can inspect or feed into downstream ecology analysis.
 
-## Installation
+In short: upload reads in, get biodiversity/taxonomy outputs out.
 
-### Prerequisites
+## Project Status And Scope
 
-- Python 3.8 or higher
-- BLAST+ (for taxonomic assignment)
-- At least 5GB free disk space for recommended databases
+- The Python pipeline is the most complete and reliable way to run analyses.
+- The API and frontend are available, but API endpoints are JWT-protected; this must be configured when running the UI against the real backend.
+- For a full UI/API walkthrough, see `docs/USER_GUIDE.md`.
 
-### Installation Steps
+## Requirements
+
+## System
+
+- Linux/macOS (WSL2 recommended on Windows)
+- Python 3.9+
+- `pip`
+
+## External Bioinformatics Tools
+
+- BLAST+ (required for taxonomy assignment)
+- VSEARCH (recommended for merging/denoising/chimera workflow)
+- `taxonkit` (optional fallback for taxonomy lineage resolution)
+- R + DADA2 (optional fallback path when VSEARCH is unavailable)
+
+Install examples:
 
 ```bash
-# Clone the repository
-git clone https://github.com/your-repo/deep-sea-edna-pipeline.git
-cd deep-sea-edna-pipeline
+# Recommended if you have conda
+conda install -c bioconda blast vsearch taxonkit
 
-# Create conda environment
-conda create -n edna-pipeline python=3.9
-conda activate edna-pipeline
-
-# Install BLAST+ (required for taxonomic classification)
-conda install -c bioconda blast
-
-# Install Python dependencies
-pip install -r requirements.txt
-
-# Set up reference databases
-python setup_databases.py --recommended
+# Ubuntu/Debian alternatives
+sudo apt-get install ncbi-blast+ vsearch
 ```
 
-## Quick Start
-
-### 1. Set up Reference Databases
-
-First, download the required reference databases from NCBI:
+Verify:
 
 ```bash
-# Download recommended databases for eDNA analysis (~400MB)
+blastn -version
+vsearch --version
+taxonkit version   # optional
+```
+
+## Quick Start (Pipeline Only)
+
+This is the fastest path to a real run.
+
+1. Create and activate a Python environment
+
+```bash
+python3 -m venv virt
+source virt/bin/activate
+```
+
+2. Install Python dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+3. Download reference databases
+
+```bash
+# Recommended bundle (~400 MB)
 python setup_databases.py --recommended
 
-# Or download specific databases
-python setup_databases.py --databases taxdb 16S_ribosomal_RNA ITS_eukaryote_sequences
-
-# List available databases
+# Optional: inspect available choices
 python setup_databases.py --list
 ```
 
-### 2. Run the Pipeline
+4. Run a simple example
+
+```bash
+python example_usage.py --create-sample 20 --output-dir test_results
+```
+
+5. Run on your own file
+
+```bash
+python example_usage.py --input /path/to/sample.fastq --output-dir results
+```
+
+For paired reads, use the Python API shown below.
+
+## Minimal Python API Example
 
 ```python
 from edna_pipeline import DeepSeaEDNAPipeline
 
-# Initialize pipeline with database directory
 pipeline = DeepSeaEDNAPipeline(db_dir="databases")
 
-# Process a single sample
-results = pipeline.process_sample(
-    input_files="path/to/sample.fastq",  # or ("R1.fastq", "R2.fastq") for paired-end
-    sample_id="my_sample",
-    output_dir="results"
+# Single-end:
+result = pipeline.process_sample(
+        input_files="/path/to/sample.fastq",
+        sample_id="sample_001",
+        output_dir="results"
 )
 
-# Check results
-if results["success"]:
-    print(f"Processing completed successfully!")
-    classification_step = next(s for s in results["pipeline_steps"] if s["step"] == "taxonomic_classification")
-    print(f"Classified ASVs: {classification_step['results']['total_classified']}")
-    print(f"Mean confidence: {classification_step['results']['mean_confidence']:.2f}%")
-else:
-    print(f"Processing failed: {results['error']}")
+# Paired-end:
+# result = pipeline.process_sample(
+#     input_files=("/path/to/sample_R1.fastq", "/path/to/sample_R2.fastq"),
+#     sample_id="sample_002",
+#     output_dir="results"
+# )
+
+print(result["success"], result.get("error"))
 ```
 
-### 3. Quick Test with Sample Data
+## What Gets Generated
+
+For each sample, outputs are written under `results/<sample_id>/` (or your chosen output directory), including:
+
+- Preprocessed reads and ASV artifacts
+- `taxonomic_assignments.csv` and related taxonomy summaries
+- Abundance/diversity metrics
+- `pipeline_results.json` (full run record)
+
+## API And Frontend (Optional)
+
+Use this if you want a service + dashboard instead of running scripts directly.
+
+## Start API
 
 ```bash
-# Generate and analyze sample data
-python example_usage.py --create-sample 20 --output-dir test_results
+python -m edna_api.server
 ```
 
-## Pipeline Architecture
+Backend defaults:
 
-1. **Data Preprocessing**: Quality filtering, adapter trimming, chimera detection
-2. **Feature Engineering**: k-mer extraction, sequence embeddings, composition analysis
-3. **AI Model Application**: 
-   - Supervised classification for known taxa
-   - Unsupervised clustering for novel taxa discovery
-4. **Taxonomic Assignment**: Confidence scoring and hierarchical taxonomy
-5. **Abundance Quantification**: Normalized read counts and diversity metrics
-6. **Visualization & Reporting**: Interactive dashboards and biodiversity reports
+- Base URL: `http://localhost:8000`
+- API prefix: `/api`
+- Health endpoint: `GET /api/health`
+- Default database dir: `databases` (override with `EDNA_DB_DIR`)
 
-## Key Capabilities
+Authentication note:
 
-### Machine Learning Models
-- Convolutional Neural Networks for local sequence patterns
-- LSTM/GRU networks for sequential dependencies
-- Transformer models for long-range relationships
-- Ensemble methods combining multiple architectures
+- Most run/database endpoints require JWT auth.
+- Login endpoint: `POST /api/auth/login`
+- Default seeded user is created in SQLite if DB is empty:
+    - username: `admin`
+    - password: `password123`
 
-### Novel Taxa Discovery
-- Deep autoencoders for feature learning
-- HDBSCAN/DBSCAN clustering
-- Outlier detection for divergent sequences
-- Phylogenetic placement analysis
+## Start Frontend
 
-### Biodiversity Assessment
-- Shannon, Simpson, Chao1 diversity indices
-- Rarefaction curve analysis
-- Beta diversity comparisons
-- Community composition visualization
-
-## Directory Structure
-
-```
-deep-sea-edna-pipeline/
-├── edna_pipeline/              # Main package
-│   ├── preprocessing/          # Data preprocessing modules
-│   ├── feature_engineering/    # Feature extraction and engineering
-│   ├── models/                # ML/DL model implementations
-│   ├── taxonomy/              # Taxonomic assignment and annotation
-│   ├── abundance/             # Abundance quantification
-│   ├── visualization/         # Plotting and reporting
-│   └── utils/                 # Utility functions
-├── config/                    # Configuration files
-├── data/                      # Sample data and databases
-├── tests/                     # Unit and integration tests
-├── docs/                      # Documentation
-├── scripts/                   # Example scripts and workflows
-└── requirements.txt           # Python dependencies
+```bash
+cd frontend
+npm install
+npm run dev
 ```
 
-## Dependencies
+Use environment variables for real backend mode:
 
-- **Deep Learning**: TensorFlow/PyTorch, Keras
-- **Bioinformatics**: BioPython, VSEARCH
-- **Data Processing**: NumPy, Pandas, Polars, Dask
-- **Machine Learning**: Scikit-learn, UMAP, HDBSCAN
-- **Visualization**: Matplotlib, Seaborn, Plotly
-- **Ecology**: Scikit-bio
-
-## Contributing
-
-Please read CONTRIBUTING.md for details on our code of conduct and the process for submitting pull requests.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Citation
-
-If you use this pipeline in your research, please cite:
-```
-[Citation information will be added upon publication]
+```bash
+export VITE_API_URL="http://localhost:8000/api"
+export VITE_USE_MOCK="false"
 ```
 
-## Support
+Important: frontend API calls currently do not automatically attach JWT tokens. If you run against real protected endpoints, add auth handling or use mock mode.
 
-For questions and support, please open an issue on GitHub or contact the development team.
+## How The Pipeline Works (Simple Mental Model)
+
+1. Input: FASTQ reads (single-end or paired-end).
+2. Cleaning: quality filtering + denoising/chimera handling.
+3. ASVs: convert cleaned reads into representative sequence variants.
+4. Taxonomy: compare ASVs to reference databases and infer taxonomy with confidence.
+5. Ecology outputs: abundance tables and diversity metrics.
+6. Reporting: machine-readable JSON/CSV artifacts for inspection and downstream analysis.
+
+## Key Files And Folders
+
+- `edna_pipeline/`: core analysis logic.
+- `edna_api/`: Flask API server and job management.
+- `frontend/`: React operations dashboard.
+- `setup_databases.py`: download/manage NCBI-based reference databases.
+- `example_usage.py`: runnable demo script.
+- `docs/USER_GUIDE.md`: deeper operator documentation.
+- `USAGE.md`: additional usage examples.
+
+## Troubleshooting
+
+- `blastn: command not found`
+    - Install BLAST+ and re-check `blastn -version`.
+- Paired-end merge or denoising errors mentioning VSEARCH
+    - Install VSEARCH and ensure it is on your PATH.
+- Taxonomy lineage fallback warnings
+    - Install `taxonkit` or provide taxonomy dump files.
+- Missing databases
+    - Re-run `python setup_databases.py --recommended` and verify disk space.
+
+## Recommended Next Reads
+
+- `docs/USER_GUIDE.md` for API/UI operational details.
+- `USAGE.md` for expanded script and output examples.

@@ -4,8 +4,6 @@ import numpy as np
 from typing import List, Tuple, Set, Dict
 from collections import defaultdict
 from Bio.SeqRecord import SeqRecord
-from Bio import pairwise2
-from Bio.pairwise2 import format_alignment
 import logging
 
 logger = logging.getLogger(__name__)

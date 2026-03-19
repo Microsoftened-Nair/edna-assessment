@@ -1,17 +1,19 @@
 """Main sequence preprocessor integrating all preprocessing steps."""
 
 import os
+import re
+import shutil
+import subprocess
+import tempfile
 from typing import List, Dict, Tuple, Any, Optional
 from pathlib import Path
 from Bio.SeqRecord import SeqRecord
-from Bio.Seq import Seq
 import logging
 
 from .quality_control import QualityController
 from .denoising import DenoiseDADA2, DenoiseDeblur
 from .chimera_removal import ChimeraRemover
 from ..utils.io_utils import read_fastq, write_fastq, read_fasta, write_fasta
-from ..utils.sequence_utils import reverse_complement
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +47,7 @@ class SequencePreprocessor:
         
         # Processing flags
         self.remove_chimeras = self.preprocessing_config.get("remove_chimeras", True)
+        self.stats: Dict[str, Any] = {}
         
     def process_single_end_reads(self, input_file: str, output_dir: str,
                                sample_id: str = None) -> Dict[str, Any]:
@@ -196,9 +199,16 @@ class SequencePreprocessor:
 
         logger.info(f"Starting preprocessing of paired-end reads: {sample_id}")
 
-        os.makedirs(output_dir, exist_ok=True)
-        sample_dir = os.path.join(output_dir, sample_id)
-        os.makedirs(sample_dir, exist_ok=True)
+        output_path = Path(output_dir)
+        output_path.mkdir(parents=True, exist_ok=True)
+        sample_dir = output_path / sample_id
+        sample_dir.mkdir(parents=True, exist_ok=True)
+        temp_merge_dir = Path(tempfile.mkdtemp(prefix=f"merge_{sample_id}_"))
+        cleanup_temp_dir = False
+
+        # Reset per-sample merge stats so callers can inspect deterministic values.
+        self.stats["merged_reads"] = 0
+        self.stats["merge_rate"] = 0.0
 
         results: Dict[str, Any] = {
             "sample_id": sample_id,
@@ -206,7 +216,7 @@ class SequencePreprocessor:
                 "forward": forward_file,
                 "reverse": reverse_file
             },
-            "output_dir": sample_dir,
+            "output_dir": str(sample_dir),
             "processing_steps": []
         }
 
@@ -216,7 +226,7 @@ class SequencePreprocessor:
             reverse_raw = read_fastq(reverse_file)
 
             filtered_forward_path, filtered_reverse_path = self.quality_controller.process_paired_reads(
-                forward_file, reverse_file, sample_dir
+                forward_file, reverse_file, str(sample_dir)
             )
 
             filtered_forward = read_fastq(filtered_forward_path)
@@ -244,18 +254,24 @@ class SequencePreprocessor:
             results["processing_steps"].append(qc_stats)
 
             logger.info("Step 2: Merging paired reads")
-            merged_sequences, merge_stats = self._merge_paired_reads(
-                filtered_forward, filtered_reverse
+            merged_sequences, merge_stats = self._merge_pair_sequences(
+                forward_fastq=Path(filtered_forward_path),
+                reverse_fastq=Path(filtered_reverse_path),
+                sample_id=sample_id,
+                output_dir=sample_dir,
+                temp_dir=temp_merge_dir,
             )
+            cleanup_temp_dir = True
 
-            merged_file = os.path.join(sample_dir, "merged_reads.fasta")
+            merged_file = sample_dir / "merged_reads.fasta"
             write_fasta(merged_sequences, merged_file)
 
             merge_stats.update({
                 "step": "pair_merging",
-                "output_file": merged_file,
+                "output_file": str(merged_file),
             })
             results["processing_steps"].append(merge_stats)
+            results["merged_sequences"] = merged_sequences
 
             if not merged_sequences:
                 raise RuntimeError("No merged sequences available after pairing step")
@@ -263,7 +279,7 @@ class SequencePreprocessor:
             logger.info("Step 3: Denoising and ASV generation")
             asvs, abundance_table = self.denoiser.denoise(merged_sequences)
 
-            asv_file = os.path.join(sample_dir, "asvs.fasta")
+            asv_file = sample_dir / "asvs.fasta"
             write_fasta(asvs, asv_file)
 
             denoise_stats = {
@@ -271,7 +287,7 @@ class SequencePreprocessor:
                 "method": type(self.denoiser).__name__,
                 "input_sequences": len(merged_sequences),
                 "output_asvs": len(asvs),
-                "output_file": asv_file,
+                "output_file": str(asv_file),
                 "abundance_table": abundance_table
             }
             results["processing_steps"].append(denoise_stats)
@@ -282,7 +298,7 @@ class SequencePreprocessor:
                     asvs, abundance_table
                 )
 
-                clean_asv_file = os.path.join(sample_dir, "asvs_no_chimeras.fasta")
+                clean_asv_file = sample_dir / "asvs_no_chimeras.fasta"
                 write_fasta(clean_asvs, clean_asv_file)
 
                 clean_abundance_table = {
@@ -295,7 +311,7 @@ class SequencePreprocessor:
                     "input_asvs": len(asvs),
                     "output_asvs": len(clean_asvs),
                     "chimeric_asvs": len(chimeric_ids),
-                    "output_file": clean_asv_file,
+                    "output_file": str(clean_asv_file),
                     "abundance_table": clean_abundance_table
                 }
                 results["processing_steps"].append(chimera_stats)
@@ -310,21 +326,24 @@ class SequencePreprocessor:
 
             results.update({
                 "final_asvs": len(final_asvs),
-                "final_asv_file": final_asv_file,
+                "final_asv_file": str(final_asv_file),
                 "abundance_table": final_abundance_table,
                 "success": True
             })
 
-            abundance_file = os.path.join(sample_dir, "abundance_table.txt")
+            abundance_file = sample_dir / "abundance_table.txt"
             self._save_abundance_table(final_abundance_table, abundance_file)
-            results["abundance_file"] = abundance_file
+            results["abundance_file"] = str(abundance_file)
 
             summary_stats = self._generate_summary_stats(results)
             results["summary_stats"] = summary_stats
 
-            log_file = os.path.join(sample_dir, "preprocessing_log.txt")
+            log_file = sample_dir / "preprocessing_log.txt"
             self._save_processing_log(results, log_file)
-            results["log_file"] = log_file
+            results["log_file"] = str(log_file)
+
+            if cleanup_temp_dir:
+                shutil.rmtree(temp_merge_dir)
 
             logger.info(f"Paired-end preprocessing completed successfully for {sample_id}")
             logger.info(f"Final output: {len(final_asvs)} ASVs")
@@ -336,6 +355,34 @@ class SequencePreprocessor:
             raise
 
         return results
+
+    def _build_vsearch_merge_cmd(
+        self,
+        forward_reads: Path,
+        reverse_reads: Path,
+        merged_output: Path,
+        unmerged_fwd_output: Path,
+        unmerged_rev_output: Path,
+        logfile_path: Path,
+    ) -> List[str]:
+        """Build the VSEARCH merge command with config-driven defaults."""
+        cfg = self.preprocessing_config
+        cpu_count = int(cfg.get("merge_threads", cfg.get("threads", os.cpu_count() or 1)))
+        min_overlap = int(cfg.get("merge_min_overlap", cfg.get("paired_min_overlap", 10)))
+        max_diffs = int(cfg.get("merge_max_diffs", cfg.get("paired_max_mismatches", 5)))
+
+        return [
+            "vsearch",
+            "--fastq_mergepairs", str(forward_reads),
+            "--reverse", str(reverse_reads),
+            "--fastqout", str(merged_output),
+            "--fastqout_notmerged_fwd", str(unmerged_fwd_output),
+            "--fastqout_notmerged_rev", str(unmerged_rev_output),
+            "--fastq_minovlen", str(min_overlap),
+            "--fastq_maxdiffs", str(max_diffs),
+            "--threads", str(cpu_count),
+            "--log", str(logfile_path),
+        ]
     
     def _save_abundance_table(self, abundance_table: Dict[str, int], output_file: str):
         """Save abundance table to file."""
@@ -397,68 +444,129 @@ class SequencePreprocessor:
                 for key, value in results["summary_stats"].items():
                     f.write(f"{key}: {value}\n")
 
-    def _merge_paired_reads(self, forward_reads: List[SeqRecord],
-                            reverse_reads: List[SeqRecord]) -> Tuple[List[SeqRecord], Dict[str, Any]]:
-        """Merge paired-end reads into consensus sequences."""
-        min_overlap = self.preprocessing_config.get("paired_min_overlap", 20)
-        max_mismatches = self.preprocessing_config.get("paired_max_mismatches", 3)
+    def _merge_pair_sequences(
+        self,
+        forward_fastq: Path,
+        reverse_fastq: Path,
+        sample_id: str,
+        output_dir: Path,
+        temp_dir: Path,
+    ) -> Tuple[List[SeqRecord], Dict[str, Any]]:
+        """Merge paired-end FASTQ files via VSEARCH, falling back to PEAR."""
+        merged_fastq = temp_dir / f"{sample_id}.merged.fastq"
+        vsearch_log = temp_dir / f"{sample_id}.vsearch.log"
+        unmerged_fwd = temp_dir / f"{sample_id}.unmerged_fwd.fastq"
+        unmerged_rev = temp_dir / f"{sample_id}.unmerged_rev.fastq"
+        unmerged_combined = output_dir / f"{sample_id}.unmerged.fastq"
 
-        pair_count = min(len(forward_reads), len(reverse_reads))
-        merged_records: List[SeqRecord] = []
-        overlap_merged = 0
-        concatenated = 0
+        cfg = self.preprocessing_config
+        cpu_count = int(cfg.get("merge_threads", cfg.get("threads", os.cpu_count() or 1)))
 
-        for idx in range(pair_count):
-            forward = forward_reads[idx]
-            reverse = reverse_reads[idx]
+        total_pairs = 0
+        merged_count = 0
 
-            merged_sequence, used_overlap = self._merge_pair_sequences(
-                forward, reverse, min_overlap, max_mismatches
+        vsearch_exe = shutil.which("vsearch")
+        pear_exe = shutil.which("pear")
+
+        if vsearch_exe:
+            cmd = self._build_vsearch_merge_cmd(
+                forward_reads=forward_fastq,
+                reverse_reads=reverse_fastq,
+                merged_output=merged_fastq,
+                unmerged_fwd_output=unmerged_fwd,
+                unmerged_rev_output=unmerged_rev,
+                logfile_path=vsearch_log,
             )
 
-            if used_overlap:
-                overlap_merged += 1
-            else:
-                concatenated += 1
+            # Use resolved executable path while keeping helper output deterministic for tests.
+            cmd[0] = vsearch_exe
+            try:
+                subprocess.run(cmd, capture_output=True, check=True, text=True)
+            except subprocess.CalledProcessError as err:
+                raise RuntimeError(
+                    f"VSEARCH merge failed for sample {sample_id}: {err.stderr or err.stdout}"
+                ) from err
 
-            seq_id = f"{forward.id}|{reverse.id}" if forward.id and reverse.id else f"pair_{idx+1}"
-            record = SeqRecord(
-                Seq(merged_sequence),
-                id=seq_id,
-                description=f"merged paired reads index={idx+1}"
+            if vsearch_log.exists():
+                log_text = vsearch_log.read_text(encoding="utf-8", errors="ignore")
+                total_pairs_match = re.search(r"Pairs\s*:\s*(\d+)", log_text, re.IGNORECASE)
+                merged_match = re.search(r"Merged\s*:\s*(\d+)", log_text, re.IGNORECASE)
+                if total_pairs_match:
+                    total_pairs = int(total_pairs_match.group(1))
+                if merged_match:
+                    merged_count = int(merged_match.group(1))
+        elif pear_exe:
+            pear_prefix = temp_dir / f"{sample_id}.pear"
+            pear_cmd = [
+                pear_exe,
+                "-f", str(forward_fastq),
+                "-r", str(reverse_fastq),
+                "-o", str(pear_prefix),
+                "-j", str(cpu_count),
+                "-v", str(int(cfg.get("merge_min_overlap", cfg.get("paired_min_overlap", 10)))),
+                "-n", str(int(cfg.get("pear_min_assembled_length", 50))),
+            ]
+            try:
+                pear_result = subprocess.run(pear_cmd, capture_output=True, check=True, text=True)
+            except subprocess.CalledProcessError as err:
+                raise RuntimeError(
+                    f"PEAR merge failed for sample {sample_id}: {err.stderr or err.stdout}"
+                ) from err
+
+            merged_fastq = pear_prefix.with_name(f"{pear_prefix.name}.assembled.fastq")
+            unmerged_fwd = pear_prefix.with_name(f"{pear_prefix.name}.unassembled.forward.fastq")
+            unmerged_rev = pear_prefix.with_name(f"{pear_prefix.name}.unassembled.reverse.fastq")
+
+            stdout_text = pear_result.stdout or ""
+            total_match = re.search(r"Assembled\s+reads\s*:\s*\d+\s*/\s*(\d+)", stdout_text, re.IGNORECASE)
+            assembled_match = re.search(r"Assembled\s+reads\s*:\s*(\d+)", stdout_text, re.IGNORECASE)
+            if total_match:
+                total_pairs = int(total_match.group(1))
+            if assembled_match:
+                merged_count = int(assembled_match.group(1))
+        else:
+            raise RuntimeError(
+                "No paired-read merge tool found. Install VSEARCH (preferred) or PEAR and ensure the "
+                "binary is available in PATH. Example: 'sudo apt install vsearch' or install PEAR."
             )
-            merged_records.append(record)
 
-        stats = {
-            "merged_pairs": overlap_merged,
-            "concatenated_pairs": concatenated,
-            "total_pairs": pair_count,
-            "min_overlap": min_overlap,
-            "max_mismatches": max_mismatches
+        merged_records = read_fastq(merged_fastq) if merged_fastq.exists() else []
+        unmerged_records: List[SeqRecord] = []
+        if unmerged_fwd.exists():
+            unmerged_records.extend(read_fastq(unmerged_fwd))
+        if unmerged_rev.exists():
+            unmerged_records.extend(read_fastq(unmerged_rev))
+
+        write_fastq(unmerged_records, unmerged_combined)
+
+        # Fallback statistics if log parsing did not match the current tool output format.
+        if merged_count == 0:
+            merged_count = len(merged_records)
+        if total_pairs == 0:
+            total_pairs = merged_count + max(len(unmerged_records) // 2, 0)
+
+        unmerged_pairs = max(total_pairs - merged_count, 0)
+        merge_rate = (merged_count / total_pairs * 100.0) if total_pairs > 0 else 0.0
+
+        logger.info(
+            "Merged %d/%d read pairs (%.2f%%) for sample %s",
+            merged_count,
+            total_pairs,
+            merge_rate,
+            sample_id,
+        )
+        if merge_rate < 70.0:
+            logger.warning("Low merge rate for %s: %.2f%%", sample_id, merge_rate)
+        if unmerged_pairs > 0:
+            logger.warning("%d reads could not be merged and were discarded", unmerged_pairs)
+
+        self.stats["merged_reads"] = merged_count
+        self.stats["merge_rate"] = merge_rate
+
+        return merged_records, {
+            "merged_reads": merged_count,
+            "total_pairs": total_pairs,
+            "merge_rate": merge_rate,
+            "unmerged_reads": unmerged_pairs,
+            "unmerged_file": str(unmerged_combined),
         }
-
-        return merged_records, stats
-
-    def _merge_pair_sequences(self, forward: SeqRecord, reverse: SeqRecord,
-                              min_overlap: int, max_mismatches: int) -> Tuple[str, bool]:
-        """Merge a single forward/reverse read pair."""
-        forward_seq = str(forward.seq)
-        reverse_seq = reverse_complement(reverse)
-
-        max_overlap = min(len(forward_seq), len(reverse_seq))
-        for overlap in range(max_overlap, min_overlap - 1, -1):
-            forward_segment = forward_seq[-overlap:]
-            reverse_segment = reverse_seq[:overlap]
-            mismatches = sum(1 for a, b in zip(forward_segment, reverse_segment) if a != b)
-
-            if mismatches <= max_mismatches:
-                consensus_overlap = ''.join(
-                    a if a == b else 'N'
-                    for a, b in zip(forward_segment, reverse_segment)
-                )
-                merged = forward_seq[:-overlap] + consensus_overlap + reverse_seq[overlap:]
-                return merged, True
-
-        # Fallback: concatenate without overlap consensus
-        merged = forward_seq + reverse_seq
-        return merged, False

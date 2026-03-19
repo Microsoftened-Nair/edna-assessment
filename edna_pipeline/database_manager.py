@@ -49,11 +49,26 @@ class DatabaseManager:
 
     # NCBI FTP base URL for pre-built BLAST databases
     NCBI_FTP_BASE = "https://ftp.ncbi.nlm.nih.gov/blast/db/"
+    # NCBI taxonomy dump base URL (names.dmp / nodes.dmp source)
+    NCBI_TAXONOMY_BASE = "https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/"
 
     # -----------------------------------------------------------------------
     # Database catalogue (verified against FTP index 2026-03-14)
     # -----------------------------------------------------------------------
     AVAILABLE_DATABASES = {
+        # === TAXONOMY SUPPORT FILES ===========================================
+        "taxdb": {
+            "description": (
+                "NCBI taxonomy dump (names.dmp / nodes.dmp) used for TaxID-to-lineage "
+                "resolution during taxonomic assignment"
+            ),
+            "files": "taxdump.tar.gz",
+            "priority": "critical",
+            "use_case": "taxonomy_lineage_resolution",
+            "approx_size_mb": 70,
+            "multi_part": False,
+        },
+
         # === PRIMARY MARKERS FOR DEEP-SEA EUKARYOTIC eDNA ==================
         "SSU_eukaryote_rRNA": {
             "description": (
@@ -285,6 +300,11 @@ class DatabaseManager:
             return {}
 
         for db_name, db_info in self.AVAILABLE_DATABASES.items():
+            if db_name == "taxdb":
+                # taxdb is downloaded from pub/taxonomy via _download_taxdb()
+                available_files[db_name] = ["taxdump.tar.gz"]
+                continue
+
             pattern = db_info["files"]
 
             if "*" in pattern:
@@ -322,6 +342,7 @@ class DatabaseManager:
         filename: str,
         destination: Path,
         verify_checksum: bool = True,
+        base_url: Optional[str] = None,
     ) -> bool:
         """
         Download a single file from NCBI FTP with automatic resume support.
@@ -343,7 +364,8 @@ class DatabaseManager:
         bool
             ``True`` on success, ``False`` on failure.
         """
-        url = urljoin(self.NCBI_FTP_BASE, filename)
+        source_base = base_url or self.NCBI_FTP_BASE
+        url = urljoin(source_base, filename)
 
         # Determine resume offset
         resume_offset = destination.stat().st_size if destination.exists() else 0
@@ -390,7 +412,7 @@ class DatabaseManager:
             print()  # newline after progress
 
             if verify_checksum:
-                if not self._verify_checksum(filename, destination):
+                if not self._verify_checksum(filename, destination, base_url=source_base):
                     self.logger.error("Checksum verification FAILED for %s", filename)
                     return False
 
@@ -405,7 +427,12 @@ class DatabaseManager:
     # Checksum verification
     # -------------------------------------------------------------------------
 
-    def _verify_checksum(self, filename: str, local_file: Path) -> bool:
+    def _verify_checksum(
+        self,
+        filename: str,
+        local_file: Path,
+        base_url: Optional[str] = None,
+    ) -> bool:
         """
         Verify MD5 checksum of a downloaded file against the NCBI-provided .md5 file.
 
@@ -425,7 +452,8 @@ class DatabaseManager:
             ``True`` if checksums match (or if verification could not be performed),
             ``False`` if checksums definitively mismatch.
         """
-        checksum_url = urljoin(self.NCBI_FTP_BASE, f"{filename}.md5")
+        source_base = base_url or self.NCBI_FTP_BASE
+        checksum_url = urljoin(source_base, f"{filename}.md5")
 
         try:
             resp = requests.get(checksum_url, timeout=15)
@@ -486,6 +514,110 @@ class DatabaseManager:
             self.logger.error("Failed to extract %s: %s", tar_file.name, exc)
             return False
 
+    def _extract_taxdump(self, tar_file: Path, extract_dir: Path) -> bool:
+        """
+        Extract only taxonomy files required by the pipeline from taxdump archive.
+
+        Required outputs:
+        - nodes.dmp
+        - names.dmp
+        """
+        required_files = {"nodes.dmp", "names.dmp"}
+        try:
+            self.logger.info("Extracting taxonomy files from %s ...", tar_file.name)
+            with tarfile.open(tar_file, "r:gz") as tar:
+                members = [m for m in tar.getmembers() if Path(m.name).name in required_files]
+                if len(members) < len(required_files):
+                    present = {Path(m.name).name for m in members}
+                    missing = required_files - present
+                    self.logger.error(
+                        "Taxdump archive is missing required files: %s",
+                        ", ".join(sorted(missing)),
+                    )
+                    return False
+
+                for member in members:
+                    member.name = Path(member.name).name
+                    tar.extract(member, path=extract_dir)
+
+            self.logger.info("Extracted nodes.dmp and names.dmp successfully.")
+            return True
+        except Exception as exc:
+            self.logger.error("Failed to extract taxonomy dump %s: %s", tar_file.name, exc)
+            return False
+
+    def _download_taxdb(self, extract: bool = True, cleanup_tar: bool = True) -> bool:
+        """Download and prepare NCBI taxonomy dump used by lineage resolution."""
+        filename = "taxdump.tar.gz"
+
+        raw_dir = self.db_dir / "raw" / "taxdb"
+        processed_dir = self.db_dir / "processed" / "taxdb"
+        raw_dir.mkdir(parents=True, exist_ok=True)
+        processed_dir.mkdir(parents=True, exist_ok=True)
+
+        destination = raw_dir / filename
+
+        # Skip if taxonomy files are already present
+        if (processed_dir / "nodes.dmp").exists() and (processed_dir / "names.dmp").exists():
+            self.logger.info("'taxdb' already present and ready.")
+            self.db_status["taxdb"] = {
+                "downloaded": 1,
+                "total": 1,
+                "status": "complete",
+                "last_updated": time.time(),
+                "last_updated_iso": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            }
+            self.save_database_status()
+            return True
+
+        if destination.exists() and not self._verify_checksum(
+            filename,
+            destination,
+            base_url=self.NCBI_TAXONOMY_BASE,
+        ):
+            self.logger.warning("Existing taxdump failed checksum; re-downloading.")
+            destination.unlink()
+
+        if not destination.exists():
+            ok = self.download_file(
+                filename,
+                destination,
+                verify_checksum=True,
+                base_url=self.NCBI_TAXONOMY_BASE,
+            )
+            if not ok:
+                self.db_status["taxdb"] = {
+                    "downloaded": 0,
+                    "total": 1,
+                    "status": "partial",
+                    "last_updated": time.time(),
+                    "last_updated_iso": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                }
+                self.save_database_status()
+                return False
+
+        success = True
+        if extract:
+            success = self._extract_taxdump(destination, processed_dir)
+            if success and cleanup_tar and destination.exists():
+                destination.unlink()
+                self.logger.debug("Deleted taxonomy tar file '%s'.", filename)
+
+        self.db_status["taxdb"] = {
+            "downloaded": 1 if success else 0,
+            "total": 1,
+            "status": "complete" if success else "partial",
+            "last_updated": time.time(),
+            "last_updated_iso": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        }
+        self.save_database_status()
+
+        if success:
+            self.logger.info("'taxdb' downloaded successfully.")
+        else:
+            self.logger.error("'taxdb' download/extract failed.")
+        return success
+
     # -------------------------------------------------------------------------
     # High-level: download a complete database
     # -------------------------------------------------------------------------
@@ -524,6 +656,10 @@ class DatabaseManager:
                 db_name, list(self.AVAILABLE_DATABASES.keys()),
             )
             return False
+
+        # taxdb is sourced from pub/taxonomy (not blast/db) and needs custom extraction
+        if db_name == "taxdb":
+            return self._download_taxdb(extract=extract, cleanup_tar=cleanup_tar)
 
         db_meta = self.AVAILABLE_DATABASES[db_name]
         self.logger.info("Starting download of '%s' database …", db_name)
@@ -639,6 +775,7 @@ class DatabaseManager:
         """
         # Ordered by priority for deep-sea eukaryotic eDNA
         recommended = [
+            "taxdb",                    # Taxonomy lineage files ~70 MB
             "SSU_eukaryote_rRNA",       # 18S primary marker   ~57 MB
             "mito",                     # COI primary marker   ~193 MB
             "env_nt",                   # Environmental eDNA   ~362 MB
@@ -650,7 +787,7 @@ class DatabaseManager:
             "Starting recommended database downloads for deep-sea eukaryotic eDNA analysis."
         )
         self.logger.info(
-            "Total estimated download: ~743 MB.  "
+            "Total estimated download: ~813 MB.  "
             "For comprehensive analysis, also consider 'nt_euk' (~570 GB) or 'core_nt' (~224 GB)."
         )
 
@@ -717,6 +854,12 @@ class DatabaseManager:
             Path prefix without extension, or ``None`` if the database is not
             available or has no recognised index files.
         """
+        if db_name == "taxdb":
+            processed_dir = self.db_dir / "processed" / "taxdb"
+            if (processed_dir / "nodes.dmp").exists() and (processed_dir / "names.dmp").exists():
+                return str(processed_dir)
+            return None
+
         status_entry = self.db_status.get(db_name, {})
         if status_entry.get("status") not in ("complete", "partial"):
             self.logger.debug(

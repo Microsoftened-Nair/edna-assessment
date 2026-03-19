@@ -8,7 +8,7 @@ This enhanced eDNA analysis pipeline now includes integrated database management
 
 - **Python**: 3.8 or higher
 - **BLAST+**: Required for taxonomic classification
-- **Disk Space**: At least 5GB for recommended databases, up to 600GB for comprehensive databases
+- **Disk Space**: At least 5GB recommended; optional comprehensive sets can exceed 700GB
 - **Memory**: Recommended 8GB RAM or higher
 - **Internet**: Required for database downloads
 
@@ -47,12 +47,14 @@ python setup_databases.py --recommended
 ```
 
 This downloads:
-- **taxdb** (58MB): NCBI taxonomy database - *Required*
+- **taxdb** (~70MB): NCBI taxonomy dump (setup extracts `nodes.dmp` and `names.dmp`) - *Required for full lineage resolution*
 - **16S_ribosomal_RNA** (65MB): 16S rRNA sequences for prokaryotes
 - **18S_fungal_sequences** (58MB): 18S rRNA sequences for fungi
 - **28S_fungal_sequences** (60MB): 28S rRNA sequences for fungi
 - **ITS_eukaryote_sequences** (71MB): ITS sequences for eukaryotes
 - **ITS_RefSeq_Fungi** (61MB): RefSeq fungal ITS sequences
+
+Important: processing does not auto-download databases during `process_sample`. If a required database is missing, BLAST-based assignment for that database is skipped.
 
 #### Advanced Setup Options
 
@@ -68,6 +70,9 @@ python setup_databases.py --databases core_nt
 
 # Download for complete analysis (WARNING: ~600GB)
 python setup_databases.py --databases nt
+
+# Download eukaryote-focused comprehensive set (WARNING: ~570GB)
+python setup_databases.py --databases nt_euk
 ```
 
 ## Usage Examples
@@ -232,6 +237,9 @@ python setup_databases.py --list
 
 # Re-download missing databases
 python setup_databases.py --recommended
+
+# Or fetch a specific missing one
+python setup_databases.py --databases taxdb ITS_eukaryote_sequences
 ```
 
 **Problem**: Download failures

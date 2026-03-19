@@ -86,6 +86,11 @@ python setup_databases.py --recommended
 python setup_databases.py --list
 ```
 
+Notes:
+
+- `taxdb` is downloaded from NCBI taxonomy dump (`taxdump.tar.gz`) and setup extracts `nodes.dmp` and `names.dmp` into `databases/processed/taxdb/`.
+- Runtime sample processing does not auto-download missing databases. Run setup first (or use the API database download endpoints) before launching analyses.
+
 4. Run a simple example
 
 ```bash
@@ -201,7 +206,7 @@ Important: frontend API calls currently do not automatically attach JWT tokens. 
 - Paired-end merge or denoising errors mentioning VSEARCH
     - Install VSEARCH and ensure it is on your PATH.
 - Taxonomy lineage fallback warnings
-    - Install `taxonkit` or provide taxonomy dump files.
+    - Install `taxonkit` as fallback, or ensure `taxdb` is present by running `python setup_databases.py --databases taxdb`.
 - Missing databases
     - Re-run `python setup_databases.py --recommended` and verify disk space.
 

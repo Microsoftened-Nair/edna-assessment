@@ -52,8 +52,11 @@ conda install -c bioconda blast
    python setup_databases.py --list
    ```
 
+   Setup note: `taxdb` is downloaded from NCBI taxonomy dump and unpacked to `nodes.dmp` and `names.dmp` in `databases/processed/taxdb/` (or your `EDNA_DB_DIR`).
+   Runtime note: run processing does not auto-download missing databases; provision databases before submitting runs.
+
 3. **Environment variables (optional)**
-   - `EDNA_DB_DIR` – override default database directory (`demo_databases` is the project default).
+   - `EDNA_DB_DIR` – override default database directory (`databases` is the project default).
    - `EDNA_MAX_WORKERS` – adjust `ThreadPoolExecutor` size for run/batch processing.
 
 4. **Start the API server**
@@ -191,7 +194,7 @@ Refer to `USAGE.md` for a full walkthrough of CLI scripts, configuration flags, 
   PY
   ```
 
-Large downloads (`core_nt`, `nt`) require significant disk space and time; ensure adequate resources before initiating.
+Large downloads (`nt_euk`, `core_nt`, `nt`) require significant disk space and time; ensure adequate resources before initiating.
 
 ---
 

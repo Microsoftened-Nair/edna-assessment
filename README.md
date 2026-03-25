@@ -76,6 +76,11 @@ source virt/bin/activate
 pip install -r requirements.txt
 ```
 
+Notes:
+
+- `requirements.txt` contains runtime dependencies required for the current pipeline + API.
+- Optional heavyweight experimentation packages (for future deep-learning or notebook exploration), such as `torch`, `transformers`, `matplotlib`, `seaborn`, `plotly`, and `rpy2`, are intentionally not installed by default.
+
 3. Download reference databases
 
 ```bash
@@ -200,6 +205,10 @@ Important: frontend API calls currently do not automatically attach JWT tokens. 
 - `USAGE.md`: additional usage examples.
 
 ## Troubleshooting
+
+- `ModuleNotFoundError` for optional research packages (for example `torch` or `transformers`)
+    - These are not required for core pipeline/API execution and are not part of the default runtime dependency set.
+    - Install them only if you are using those optional workflows.
 
 - `blastn: command not found`
     - Install BLAST+ and re-check `blastn -version`.

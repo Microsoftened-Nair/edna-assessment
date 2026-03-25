@@ -23,7 +23,11 @@ GATTTGGGGTTCAAAGCAGTATCGATCAAATAGTAAATCCATTTGTTCAACTCACAGTTT
 
 def test_imports():
     print("\n--- Testing Imports ---")
-    imports = ["numpy", "pandas", "scipy", "Bio", "sklearn", "umap", "torch", "transformers", "rpy2", "joblib"]
+    imports = [
+        "numpy", "pandas", "scipy", "Bio", "sklearn", "umap", "joblib",
+        "yaml", "requests", "flask", "flask_sqlalchemy", "flask_jwt_extended"
+    ]
+    optional_imports = ["torch", "transformers", "rpy2"]
     success = True
     for imp in imports:
         try:
@@ -32,6 +36,15 @@ def test_imports():
         except ImportError as e:
             print(f"✗ Failed to import {imp}: {e}")
             success = False
+
+    print("\nOptional imports (informational):")
+    for imp in optional_imports:
+        try:
+            __import__(imp)
+            print(f"✓ Optional package available: {imp}")
+        except ImportError:
+            print(f"- Optional package not installed: {imp}")
+
     return success
 
 def test_kmer():

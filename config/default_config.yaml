@@ -12,6 +12,7 @@ preprocessing:
 
 # Feature engineering settings
 feature_engineering:
+  run_in_pipeline: false  # DNABERT2-first: skip expensive k-mer feature extraction during standard runs
   kmer_size: [3, 4, 5, 6]
   use_composition: true
   use_embeddings: true
@@ -39,11 +40,27 @@ models:
     dimensionality_reduction: "umap"  # "umap", "tsne", "pca"
     n_components: 50
 
-# Taxonomy settings
+# Taxonomy settings (DNABERT2-first architecture)
 taxonomy:
+  # DNABERT2 is now the primary classifier
+  # See taxonomic_assignment.py for fallback options
+  primary_method: "dnabert2_knn"  # Main classifier
   confidence_threshold: 0.7
-  hierarchical_levels: ["domain", "phylum", "class", "order", "family", "genus", "species"]
-  novel_taxa_threshold: 0.5
+  hierarchical_levels: ["kingdom", "phylum", "class", "order", "family", "genus", "species"]
+  
+  # DNABERT2 configuration
+  dnabert2:
+    enabled: true
+    model_source: "pretrained"  # "pretrained" or path to fine-tuned model
+    model_name: "zhihan1996/DNABERT-2-117M"  # Only used if model_source == "pretrained"
+    max_length: 256
+    device: null  # null = auto-detect, "cuda", or "cpu"
+    
+    # KNN-specific settings (used when classification_mode is "knn")
+    classification_mode: "knn"  # "knn" for pretrained, "head" for fine-tuned
+    reference_db_path: "databases/processed/16S_ribosomal_RNA/"
+    knn_k: 5  # Number of neighbors to consider
+    knn_distance_threshold: null  # null = no threshold, or float (cosine distance)
 
 # Abundance settings
 abundance:

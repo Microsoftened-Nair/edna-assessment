@@ -1,0 +1,2281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Classification Report - hello2</title>
+  <style>
+    :root {
+      --bg-primary: #0b1324;
+      --bg-secondary: #111c33;
+      --bg-elevated: #182642;
+      --accent: #2be38b;
+      --accent-soft: rgba(43, 227, 139, 0.12);
+      --text-primary: #f5f7fb;
+      --text-secondary: #c8d3eb;
+      --text-muted: #8591ac;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.35);
+      --font-family: Inter, Segoe UI, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 28px;
+      font-family: var(--font-family);
+      color: var(--text-primary);
+      background:
+        radial-gradient(circle at top left, rgba(43, 227, 139, 0.08), transparent 40%),
+        radial-gradient(circle at bottom right, rgba(43, 227, 139, 0.05), transparent 35%),
+        var(--bg-primary);
+      line-height: 1.45;
+    }
+
+    .report {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      gap: 18px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(24, 38, 66, 0.92), rgba(17, 28, 51, 0.95));
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 24px;
+      display: grid;
+      gap: 10px;
+    }
+
+    h1, h2, h3 { margin: 0; }
+    h1 { font-size: 28px; letter-spacing: 0.2px; }
+    h2 { font-size: 20px; }
+    h3 { font-size: 17px; color: var(--text-secondary); }
+
+    .muted { color: var(--text-muted); margin: 0; }
+
+    .cards {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .label { color: var(--text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .value { font-size: 22px; font-weight: 650; }
+
+    .grid-two {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    }
+
+    .panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .distribution-grid { display: grid; gap: 8px; }
+
+    .distribution-row-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 13px;
+    }
+
+    .bar-track {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #0fbf76);
+      border-radius: 999px;
+    }
+
+    .table-wrapper { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 900px;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--border-color);
+      text-align: left;
+      padding: 10px 8px;
+      white-space: nowrap;
+    }
+
+    th { color: var(--text-secondary); font-weight: 600; }
+
+    .footnote {
+      color: var(--text-muted);
+      font-size: 12px;
+      text-align: right;
+    }
+
+    @media (max-width: 720px) {
+      body { padding: 14px; }
+      .hero { padding: 16px; }
+      .panel { padding: 14px; }
+      .value { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="report">
+    <section class="hero">
+      <h1>eDNA Taxonomic Classification Report</h1>
+      <p class="muted">Sample <strong>hello2</strong> • Generated 2026-03-28 17:48:33 UTC</p>
+      <div class="cards">
+        <article class="card"><div class="label">Classified Sequences</div><div class="value">14,956</div></article>
+        <article class="card"><div class="label">Mean Confidence</div><div class="value">8.33%</div></article>
+        <article class="card"><div class="label">Classification Mode</div><div class="value">embedding_kmeans_fallback</div></article>
+        <article class="card"><div class="label">Classifier</div><div class="value">MiniBatchKMeans</div></article>
+      </div>
+      <p class="muted">Run started: backfilled-from-embeddings • Completed: 2026-03-28T17:48:33.805663+00:00 • Duration: 0.0s</p>
+    </section>
+
+    <section class="grid-two">
+      
+<section class="panel">
+  <h3>Phylum / Cluster Composition</h3>
+  <div class="distribution-grid">
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>OTU-010</span>
+    <span>14956 (100.0%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 100.00%"></div></div>
+</div>
+</div>
+</section>
+
+      
+<section class="panel">
+  <h3>Genus Composition</h3>
+  <div class="distribution-grid">
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>OTU-010</span>
+    <span>14956 (100.0%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 100.00%"></div></div>
+</div>
+</div>
+</section>
+
+      
+<section class="panel">
+  <h3>Species Composition</h3>
+  <div class="distribution-grid">
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>OTU-010</span>
+    <span>14956 (100.0%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 100.00%"></div></div>
+</div>
+</div>
+</section>
+
+      
+<section class="panel">
+  <h3>Confidence Distribution</h3>
+  <div class="distribution-grid">
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>0-40</span>
+    <span>14956 (100.0%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 100.00%"></div></div>
+</div>
+
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>40-60</span>
+    <span>0 (0.0%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 2.00%"></div></div>
+</div>
+
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>60-80</span>
+    <span>0 (0.0%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 2.00%"></div></div>
+</div>
+
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>80-90</span>
+    <span>0 (0.0%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 2.00%"></div></div>
+</div>
+
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>90-100</span>
+    <span>0 (0.0%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 2.00%"></div></div>
+</div>
+</div>
+</section>
+
+    </section>
+
+    
+<section class="panel">
+  <h3>Per-Sequence Classification Preview</h3>
+  <p class="muted">Showing up to 200 sequences.</p>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Sequence ID</th>
+          <th>Kingdom</th>
+          <th>Phylum / Cluster</th>
+          <th>Genus</th>
+          <th>Species</th>
+          <th>Confidence</th>
+          <th>Method</th>
+        </tr>
+      </thead>
+      <tbody>
+<tr>
+  <td>AF515816.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY688433.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>Z22781.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ582031.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AB070566.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AB070570.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY033301.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY035307.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ619051.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>U87775.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF230720.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF193818.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>D30771.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>D30774.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>DQ904772.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY553109.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY553101.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ295685.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF140004.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF539761.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF468402.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF468400.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ440983.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF468399.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF468394.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF411853.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY167274.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY167285.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF468404.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF539763.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY212590.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ534663.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ534672.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF273252.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY395028.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>D50655.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY491599.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY167275.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ849367.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY162141.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ232231.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF184220.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF170731.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF539762.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF539767.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF539777.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ289162.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY167306.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ441002.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY167291.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF511431.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>X98210.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ544690.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF170351.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY353696.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY486373.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AB021331.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AB166780.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF384208.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AB021338.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY062930.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY689032.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY689084.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY689049.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY689055.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY689054.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AB091198.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY054370.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY212747.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY221176.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AB024306.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY328650.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>U87784.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF394906.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF394904.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AB015550.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AM745149.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ241002.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>DQ415841.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ006853.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AB248626.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AB248627.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AM086113.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>DQ501304.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ133795.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AM086138.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ306775.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ306771.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AB254783.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>DQ328619.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF543496.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY177783.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF445705.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF445695.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF084850.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY662018.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY093476.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY214182.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF050549.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF050550.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ009499.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ009476.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ009506.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ009481.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY326619.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF184222.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AB035723.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>U42638.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF026998.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>DQ415769.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY328568.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>L22533.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY468372.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY369250.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF391130.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>DQ097527.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF388307.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY135531.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>DQ855467.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AB252437.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>DQ811816.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY771952.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY028220.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY491589.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>U34280.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF380257.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY005439.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>M73225.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY907752.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY049981.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>U42084.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>U15162.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF141908.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF141907.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>U11012.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF394902.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF394903.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>U11016.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>U12460.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AB021128.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>U12462.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF178036.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>U12461.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>U17645.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF060705.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>U11019.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF510102.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ429500.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>U17644.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>U12459.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>U12458.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ007800.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AM086118.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>X97691.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY177804.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AB188771.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ306766.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY214184.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ567570.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ567548.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF050560.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF050559.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ241008.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF507896.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AM746089.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AM745210.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY328629.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ578476.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AJ227811.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY328582.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>L07834.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY869686.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AY526503.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>M73227.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>U96436.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AB074459.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF260591.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>M73221.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>M73226.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>U54805.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF162860.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>M73222.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF147752.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF416764.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>M73223.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF325175.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF069758.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>X62432.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>U03777.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>U03776.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF283007.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF318944.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF414868.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF318945.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF414870.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>M60313.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF414872.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF414871.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF414878.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>AF414876.1</td>
+  <td>Unknown</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>OTU-010</td>
+  <td>8.33%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+</tbody>
+    </table>
+  </div>
+</section>
+
+
+    <p class="footnote">This report is generated automatically from run artifacts and is intended for analytical review.</p>
+  </main>
+</body>
+</html>

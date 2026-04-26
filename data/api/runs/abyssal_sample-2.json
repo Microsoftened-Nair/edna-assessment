@@ -2,559 +2,335 @@
   "sample_id": "abyssal_sample-2",
   "input_type": "single",
   "input_files": [
-    "/home/megh/edna/data/api/uploads/9ccc1ce1b7a742858f3d6c91d84e3cee_sample_single_02.fastq"
+    "/home/megh/edna/data/api/uploads/56e9d6cc4b0d4862b073662d83cad023_HMP_MOCK.v35.fasta"
   ],
-  "output_dir": "results/abyssal_sample-2",
-  "start_time": "2025-09-30T18:35:28.682420",
-  "end_time": "2025-09-30T18:35:29.617201",
-  "processing_time": 0.934781,
+  "output_dir": "results",
+  "start_time": "2026-04-03T07:51:47.815519+00:00",
+  "end_time": "2026-04-03T07:51:56.131634+00:00",
+  "processing_time": 8.308432,
   "success": true,
   "error": null,
   "status": "completed",
   "pipeline_steps": [
     {
-      "step": "preprocessing",
+      "step": "embedding_generation",
       "status": "completed",
       "results": {
-        "sample_id": "abyssal_sample-2",
-        "input_file": "/home/megh/edna/data/api/uploads/9ccc1ce1b7a742858f3d6c91d84e3cee_sample_single_02.fastq",
-        "output_dir": "results/abyssal_sample-2/abyssal_sample-2",
-        "processing_steps": [
-          {
-            "step": "quality_control",
-            "input_sequences": 25,
-            "output_sequences": 25,
-            "output_file": "results/abyssal_sample-2/abyssal_sample-2/filtered.fastq"
-          },
-          {
-            "step": "denoising",
-            "method": "DenoiseDADA2",
-            "input_sequences": 25,
-            "output_asvs": 25,
-            "output_file": "results/abyssal_sample-2/abyssal_sample-2/asvs.fasta",
-            "abundance_table": {
-              "ASV_1": 1,
-              "ASV_2": 1,
-              "ASV_3": 1,
-              "ASV_4": 1,
-              "ASV_5": 1,
-              "ASV_6": 1,
-              "ASV_7": 1,
-              "ASV_8": 1,
-              "ASV_9": 1,
-              "ASV_10": 1,
-              "ASV_11": 1,
-              "ASV_12": 1,
-              "ASV_13": 1,
-              "ASV_14": 1,
-              "ASV_15": 1,
-              "ASV_16": 1,
-              "ASV_17": 1,
-              "ASV_18": 1,
-              "ASV_19": 1,
-              "ASV_20": 1,
-              "ASV_21": 1,
-              "ASV_22": 1,
-              "ASV_23": 1,
-              "ASV_24": 1,
-              "ASV_25": 1
-            }
-          },
-          {
-            "step": "chimera_removal",
-            "input_asvs": 25,
-            "output_asvs": 25,
-            "chimeric_asvs": 0,
-            "output_file": "results/abyssal_sample-2/abyssal_sample-2/asvs_no_chimeras.fasta",
-            "abundance_table": {
-              "ASV_1": 1,
-              "ASV_2": 1,
-              "ASV_3": 1,
-              "ASV_4": 1,
-              "ASV_5": 1,
-              "ASV_6": 1,
-              "ASV_7": 1,
-              "ASV_8": 1,
-              "ASV_9": 1,
-              "ASV_10": 1,
-              "ASV_11": 1,
-              "ASV_12": 1,
-              "ASV_13": 1,
-              "ASV_14": 1,
-              "ASV_15": 1,
-              "ASV_16": 1,
-              "ASV_17": 1,
-              "ASV_18": 1,
-              "ASV_19": 1,
-              "ASV_20": 1,
-              "ASV_21": 1,
-              "ASV_22": 1,
-              "ASV_23": 1,
-              "ASV_24": 1,
-              "ASV_25": 1
-            }
-          }
+        "message": "Embeddings generated successfully",
+        "dnabert2_embeddings_file": "/home/megh/edna/results/abyssal_sample-2_dnabert2_embeddings.npz",
+        "total_classified": 32,
+        "embedding_shape": [
+          32,
+          768
         ],
-        "final_asvs": 25,
-        "final_asv_file": "results/abyssal_sample-2/abyssal_sample-2/asvs_no_chimeras.fasta",
-        "abundance_table": {
-          "ASV_1": 1,
-          "ASV_2": 1,
-          "ASV_3": 1,
-          "ASV_4": 1,
-          "ASV_5": 1,
-          "ASV_6": 1,
-          "ASV_7": 1,
-          "ASV_8": 1,
-          "ASV_9": 1,
-          "ASV_10": 1,
-          "ASV_11": 1,
-          "ASV_12": 1,
-          "ASV_13": 1,
-          "ASV_14": 1,
-          "ASV_15": 1,
-          "ASV_16": 1,
-          "ASV_17": 1,
-          "ASV_18": 1,
-          "ASV_19": 1,
-          "ASV_20": 1,
-          "ASV_21": 1,
-          "ASV_22": 1,
-          "ASV_23": 1,
-          "ASV_24": 1,
-          "ASV_25": 1
-        },
-        "success": true,
-        "abundance_file": "results/abyssal_sample-2/abyssal_sample-2/abundance_table.txt",
-        "summary_stats": {
-          "sample_id": "abyssal_sample-2",
-          "total_processing_steps": 3,
-          "final_asvs": 25,
-          "quality_control_input": 25,
-          "quality_control_output": 25,
-          "denoising_input": 25,
-          "denoising_output": 25,
-          "chimera_removal_output": 25
-        },
-        "log_file": "results/abyssal_sample-2/abyssal_sample-2/preprocessing_log.txt"
-      }
-    },
-    {
-      "step": "feature_extraction",
-      "status": "completed",
-      "results": {
-        "total_asvs": 25,
-        "feature_types": [
-          "kmer_3",
-          "kmer_4",
-          "kmer_5",
-          "kmer_6",
-          "kmer_combined",
-          "composition",
-          "structural",
-          "one_hot",
-          "embeddings"
-        ],
-        "feature_shapes": {
-          "kmer_3": [
-            25,
-            64
-          ],
-          "kmer_4": [
-            25,
-            256
-          ],
-          "kmer_5": [
-            25,
-            1024
-          ],
-          "kmer_6": [
-            25,
-            4096
-          ],
-          "kmer_combined": [
-            25,
-            5440
-          ],
-          "composition": [
-            25,
-            23
-          ],
-          "structural": [
-            25,
-            8
-          ],
-          "one_hot": [
-            25,
-            1000,
-            4
-          ],
-          "embeddings": [
-            25,
-            128
-          ]
-        },
-        "recommended_features": [
-          "composition",
-          "structural",
-          "kmer_3",
-          "kmer_4",
-          "kmer_5",
-          "embeddings",
-          "one_hot"
-        ],
-        "statistics_file": "results/abyssal_sample-2/feature_statistics.txt",
-        "features_file": "results/abyssal_sample-2/features.pkl"
+        "model_name": "zhihan1996/DNABERT-2-117M",
+        "max_length": 256
       }
     },
     {
       "step": "taxonomic_classification",
       "status": "completed",
       "results": {
-        "total_classified": 0,
-        "taxonomy": {
-          "ASV_1": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_2": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_3": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_4": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_5": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_6": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_7": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_8": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_9": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_10": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_11": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_12": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_13": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_14": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_15": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_16": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_17": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_18": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_19": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_20": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_21": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_22": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_23": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_24": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          },
-          "ASV_25": {
-            "domain": "Unknown",
-            "phylum": "Unknown",
-            "class": "Unknown",
-            "order": "Unknown",
-            "family": "Unknown",
-            "genus": "Unknown",
-            "species": "Unknown"
-          }
+        "message": "Classification generated successfully",
+        "classification_mode": "supervised_taxonomy",
+        "classifier": "embedding_model_bundle.joblib",
+        "total_classified": 32,
+        "mean_confidence": 5.23,
+        "confidence_distribution": {
+          "0-40": 32,
+          "40-60": 0,
+          "60-80": 0,
+          "80-90": 0,
+          "90-100": 0
         },
-        "confidence_scores": {
-          "ASV_1": 0.1,
-          "ASV_2": 0.1,
-          "ASV_3": 0.1,
-          "ASV_4": 0.1,
-          "ASV_5": 0.1,
-          "ASV_6": 0.1,
-          "ASV_7": 0.1,
-          "ASV_8": 0.1,
-          "ASV_9": 0.1,
-          "ASV_10": 0.1,
-          "ASV_11": 0.1,
-          "ASV_12": 0.1,
-          "ASV_13": 0.1,
-          "ASV_14": 0.1,
-          "ASV_15": 0.1,
-          "ASV_16": 0.1,
-          "ASV_17": 0.1,
-          "ASV_18": 0.1,
-          "ASV_19": 0.1,
-          "ASV_20": 0.1,
-          "ASV_21": 0.1,
-          "ASV_22": 0.1,
-          "ASV_23": 0.1,
-          "ASV_24": 0.1,
-          "ASV_25": 0.1
-        },
-        "taxonomy_file": "results/abyssal_sample-2/taxonomy.json",
-        "detailed_file": "results/abyssal_sample-2/taxonomic_assignments.csv",
-        "summary_file": "results/abyssal_sample-2/taxonomy_summary.json",
         "phylum_distribution": {
-          "Unknown": 25
+          "Bacteria": 32
         },
-        "classification_method": "blast, kmer",
-        "mean_confidence": 10.0,
-        "classification_summary": {
-          "total_sequences": 25,
-          "mean_confidence": 10.0,
-          "median_confidence": 10.0,
-          "taxonomic_diversity": {
-            "kingdom": {},
-            "phylum": {},
-            "class": {},
-            "order": {},
-            "family": {},
-            "genus": {},
-            "species": {}
-          },
-          "classification_success_rates": {
-            "kingdom": 0.0,
-            "phylum": 0.0,
-            "class": 0.0,
-            "order": 0.0,
-            "family": 0.0,
-            "genus": 0.0,
-            "species": 0.0
-          }
-        }
-      }
-    },
-    {
-      "step": "abundance_quantification",
-      "status": "completed",
-      "results": {
-        "total_reads": 25,
-        "total_asvs": 25,
-        "diversity_metrics": {
-          "richness": {
-            "sample": 25
-          },
-          "shannon": {
-            "sample": 3.2188758248682
-          },
-          "simpson": {
-            "sample": 0.96
-          },
-          "chao1": {
-            "sample": 325.0
-          }
+        "genus_distribution": {
+          "Actinomycetales": 32
         },
-        "taxonomic_summary": {
-          "domain": {
-            "Unknown": 25
-          },
-          "phylum": {
-            "Unknown": 25
-          },
-          "class": {
-            "Unknown": 25
-          },
-          "order": {
-            "Unknown": 25
-          },
-          "family": {
-            "Unknown": 25
-          },
-          "genus": {
-            "Unknown": 25
-          },
-          "species": {
-            "Unknown": 25
-          }
+        "species_distribution": {
+          "Streptomycineae": 32
         },
-        "abundance_file": "results/abyssal_sample-2/abundance_matrix.csv",
-        "normalized_file": "results/abyssal_sample-2/normalized_abundance.csv",
-        "diversity_file": "results/abyssal_sample-2/diversity_metrics.csv",
-        "taxonomic_file": "results/abyssal_sample-2/taxonomic_abundance.json"
+        "detailed_file": "data/api/classifications/abyssal_sample-2_taxonomic_classifications.csv",
+        "summary_file": "data/api/classifications/abyssal_sample-2_classification_summary.json",
+        "predictions_file": "data/api/classifications/abyssal_sample-2_taxonomic_classifications.json",
+        "top_predictions": [
+          {
+            "sequence_id": "A.baumannii.1",
+            "kingdom": "Root",
+            "phylum": "Bacteria",
+            "class": "\"Actinobacteria\"",
+            "order": "Actinobacteria",
+            "family": "Actinobacteridae",
+            "genus": "Actinomycetales",
+            "species": "Streptomycineae",
+            "confidence": 5.23,
+            "method": "supervised_taxonomy",
+            "predicted_label": "Root;Bacteria;\"Actinobacteria\";Actinobacteria;Actinobacteridae;Actinomycetales;Streptomycineae;Streptomycetaceae;Streptomyces"
+          },
+          {
+            "sequence_id": "A.odontolyticus.1",
+            "kingdom": "Root",
+            "phylum": "Bacteria",
+            "class": "\"Actinobacteria\"",
+            "order": "Actinobacteria",
+            "family": "Actinobacteridae",
+            "genus": "Actinomycetales",
+            "species": "Streptomycineae",
+            "confidence": 5.23,
+            "method": "supervised_taxonomy",
+            "predicted_label": "Root;Bacteria;\"Actinobacteria\";Actinobacteria;Actinobacteridae;Actinomycetales;Streptomycineae;Streptomycetaceae;Streptomyces"
+          },
+          {
+            "sequence_id": "B.cereus.1",
+            "kingdom": "Root",
+            "phylum": "Bacteria",
+            "class": "\"Actinobacteria\"",
+            "order": "Actinobacteria",
+            "family": "Actinobacteridae",
+            "genus": "Actinomycetales",
+            "species": "Streptomycineae",
+            "confidence": 5.23,
+            "method": "supervised_taxonomy",
+            "predicted_label": "Root;Bacteria;\"Actinobacteria\";Actinobacteria;Actinobacteridae;Actinomycetales;Streptomycineae;Streptomycetaceae;Streptomyces"
+          },
+          {
+            "sequence_id": "B.vulgatus.1",
+            "kingdom": "Root",
+            "phylum": "Bacteria",
+            "class": "\"Actinobacteria\"",
+            "order": "Actinobacteria",
+            "family": "Actinobacteridae",
+            "genus": "Actinomycetales",
+            "species": "Streptomycineae",
+            "confidence": 5.23,
+            "method": "supervised_taxonomy",
+            "predicted_label": "Root;Bacteria;\"Actinobacteria\";Actinobacteria;Actinobacteridae;Actinomycetales;Streptomycineae;Streptomycetaceae;Streptomyces"
+          },
+          {
+            "sequence_id": "B.vulgatus.2",
+            "kingdom": "Root",
+            "phylum": "Bacteria",
+            "class": "\"Actinobacteria\"",
+            "order": "Actinobacteria",
+            "family": "Actinobacteridae",
+            "genus": "Actinomycetales",
+            "species": "Streptomycineae",
+            "confidence": 5.23,
+            "method": "supervised_taxonomy",
+            "predicted_label": "Root;Bacteria;\"Actinobacteria\";Actinobacteria;Actinobacteridae;Actinomycetales;Streptomycineae;Streptomycetaceae;Streptomyces"
+          },
+          {
+            "sequence_id": "B.vulgatus.4",
+            "kingdom": "Root",
+            "phylum": "Bacteria",
+            "class": "\"Actinobacteria\"",
+            "order": "Actinobacteria",
+            "family": "Actinobacteridae",
+            "genus": "Actinomycetales",
+            "species": "Streptomycineae",
+            "confidence": 5.23,
+            "method": "supervised_taxonomy",
+            "predicted_label": "Root;Bacteria;\"Actinobacteria\";Actinobacteria;Actinobacteridae;Actinomycetales;Streptomycineae;Streptomycetaceae;Streptomyces"
+          },
+          {
+            "sequence_id": "B.vulgatus.5",
+            "kingdom": "Root",
+            "phylum": "Bacteria",
+            "class": "\"Actinobacteria\"",
+            "order": "Actinobacteria",
+            "family": "Actinobacteridae",
+            "genus": "Actinomycetales",
+            "species": "Streptomycineae",
+            "confidence": 5.23,
+            "method": "supervised_taxonomy",
+            "predicted_label": "Root;Bacteria;\"Actinobacteria\";Actinobacteria;Actinobacteridae;Actinomycetales;Streptomycineae;Streptomycetaceae;Streptomyces"
+          },
+          {
+            "sequence_id": "B.vulgatus.7",
+            "kingdom": "Root",
+            "phylum": "Bacteria",
+            "class": "\"Actinobacteria\"",
+            "order": "Actinobacteria",
+            "family": "Actinobacteridae",
+            "genus": "Actinomycetales",
+            "species": "Streptomycineae",
+            "confidence": 5.23,
+            "method": "supervised_taxonomy",
+            "predicted_label": "Root;Bacteria;\"Actinobacteria\";Actinobacteria;Actinobacteridae;Actinomycetales;Streptomycineae;Streptomycetaceae;Streptomyces"
+          },
+          {
+            "sequence_id": "C.beijerinckii.1",
+            "kingdom": "Root",
+            "phylum": "Bacteria",
+            "class": "\"Actinobacteria\"",
+            "order": "Actinobacteria",
+            "family": "Actinobacteridae",
+            "genus": "Actinomycetales",
+            "species": "Streptomycineae",
+            "confidence": 5.23,
+            "method": "supervised_taxonomy",
+            "predicted_label": "Root;Bacteria;\"Actinobacteria\";Actinobacteria;Actinobacteridae;Actinomycetales;Streptomycineae;Streptomycetaceae;Streptomyces"
+          },
+          {
+            "sequence_id": "C.beijerinckii.3",
+            "kingdom": "Root",
+            "phylum": "Bacteria",
+            "class": "\"Actinobacteria\"",
+            "order": "Actinobacteria",
+            "family": "Actinobacteridae",
+            "genus": "Actinomycetales",
+            "species": "Streptomycineae",
+            "confidence": 5.23,
+            "method": "supervised_taxonomy",
+            "predicted_label": "Root;Bacteria;\"Actinobacteria\";Actinobacteria;Actinobacteridae;Actinomycetales;Streptomycineae;Streptomycetaceae;Streptomyces"
+          },
+          {
+            "sequence_id": "C.beijerinckii.4",
+            "kingdom": "Root",
+            "phylum": "Bacteria",
+            "class": "\"Actinobacteria\"",
+            "order": "Actinobacteria",
+            "family": "Actinobacteridae",
+            "genus": "Actinomycetales",
+            "species": "Streptomycineae",
+            "confidence": 5.23,
+            "method": "supervised_taxonomy",
+            "predicted_label": "Root;Bacteria;\"Actinobacteria\";Actinobacteria;Actinobacteridae;Actinomycetales;Streptomycineae;Streptomycetaceae;Streptomyces"
+          },
+          {
+            "sequence_id": "D.radiodurans.1",
+            "kingdom": "Root",
+            "phylum": "Bacteria",
+            "class": "\"Actinobacteria\"",
+            "order": "Actinobacteria",
+            "family": "Actinobacteridae",
+            "genus": "Actinomycetales",
+            "species": "Streptomycineae",
+            "confidence": 5.23,
+            "method": "supervised_taxonomy",
+            "predicted_label": "Root;Bacteria;\"Actinobacteria\";Actinobacteria;Actinobacteridae;Actinomycetales;Streptomycineae;Streptomycetaceae;Streptomyces"
+          },
+          {
+            "sequence_id": "E.faecalis.1",
+            "kingdom": "Root",
+            "phylum": "Bacteria",
+            "class": "\"Actinobacteria\"",
+            "order": "Actinobacteria",
+            "family": "Actinobacteridae",
+            "genus": "Actinomycetales",
+            "species": "Streptomycineae",
+            "confidence": 5.23,
+            "method": "supervised_taxonomy",
+            "predicted_label": "Root;Bacteria;\"Actinobacteria\";Actinobacteria;Actinobacteridae;Actinomycetales;Streptomycineae;Streptomycetaceae;Streptomyces"
+          },
+          {
+            "sequence_id": "E.faecalis.2",
+            "kingdom": "Root",
+            "phylum": "Bacteria",
+            "class": "\"Actinobacteria\"",
+            "order": "Actinobacteria",
+            "family": "Actinobacteridae",
+            "genus": "Actinomycetales",
+            "species": "Streptomycineae",
+            "confidence": 5.23,
+            "method": "supervised_taxonomy",
+            "predicted_label": "Root;Bacteria;\"Actinobacteria\";Actinobacteria;Actinobacteridae;Actinomycetales;Streptomycineae;Streptomycetaceae;Streptomyces"
+          },
+          {
+            "sequence_id": "E.coli.1",
+            "kingdom": "Root",
+            "phylum": "Bacteria",
+            "class": "\"Actinobacteria\"",
+            "order": "Actinobacteria",
+            "family": "Actinobacteridae",
+            "genus": "Actinomycetales",
+            "species": "Streptomycineae",
+            "confidence": 5.23,
+            "method": "supervised_taxonomy",
+            "predicted_label": "Root;Bacteria;\"Actinobacteria\";Actinobacteria;Actinobacteridae;Actinomycetales;Streptomycineae;Streptomycetaceae;Streptomyces"
+          },
+          {
+            "sequence_id": "H.pylori.1",
+            "kingdom": "Root",
+            "phylum": "Bacteria",
+            "class": "\"Actinobacteria\"",
+            "order": "Actinobacteria",
+            "family": "Actinobacteridae",
+            "genus": "Actinomycetales",
+            "species": "Streptomycineae",
+            "confidence": 5.23,
+            "method": "supervised_taxonomy",
+            "predicted_label": "Root;Bacteria;\"Actinobacteria\";Actinobacteria;Actinobacteridae;Actinomycetales;Streptomycineae;Streptomycetaceae;Streptomyces"
+          },
+          {
+            "sequence_id": "L.gasseri.1",
+            "kingdom": "Root",
+            "phylum": "Bacteria",
+            "class": "\"Actinobacteria\"",
+            "order": "Actinobacteria",
+            "family": "Actinobacteridae",
+            "genus": "Actinomycetales",
+            "species": "Streptomycineae",
+            "confidence": 5.23,
+            "method": "supervised_taxonomy",
+            "predicted_label": "Root;Bacteria;\"Actinobacteria\";Actinobacteria;Actinobacteridae;Actinomycetales;Streptomycineae;Streptomycetaceae;Streptomyces"
+          },
+          {
+            "sequence_id": "L.monocytogenes.1",
+            "kingdom": "Root",
+            "phylum": "Bacteria",
+            "class": "\"Actinobacteria\"",
+            "order": "Actinobacteria",
+            "family": "Actinobacteridae",
+            "genus": "Actinomycetales",
+            "species": "Streptomycineae",
+            "confidence": 5.23,
+            "method": "supervised_taxonomy",
+            "predicted_label": "Root;Bacteria;\"Actinobacteria\";Actinobacteria;Actinobacteridae;Actinomycetales;Streptomycineae;Streptomycetaceae;Streptomyces"
+          },
+          {
+            "sequence_id": "N.meningitidis.1",
+            "kingdom": "Root",
+            "phylum": "Bacteria",
+            "class": "\"Actinobacteria\"",
+            "order": "Actinobacteria",
+            "family": "Actinobacteridae",
+            "genus": "Actinomycetales",
+            "species": "Streptomycineae",
+            "confidence": 5.23,
+            "method": "supervised_taxonomy",
+            "predicted_label": "Root;Bacteria;\"Actinobacteria\";Actinobacteria;Actinobacteridae;Actinomycetales;Streptomycineae;Streptomycetaceae;Streptomyces"
+          },
+          {
+            "sequence_id": "P.acnes.1",
+            "kingdom": "Root",
+            "phylum": "Bacteria",
+            "class": "\"Actinobacteria\"",
+            "order": "Actinobacteria",
+            "family": "Actinobacteridae",
+            "genus": "Actinomycetales",
+            "species": "Streptomycineae",
+            "confidence": 5.23,
+            "method": "supervised_taxonomy",
+            "predicted_label": "Root;Bacteria;\"Actinobacteria\";Actinobacteria;Actinobacteridae;Actinomycetales;Streptomycineae;Streptomycetaceae;Streptomyces"
+          }
+        ]
       }
     },
     {
       "step": "report_generation",
       "status": "completed",
       "results": {
-        "report_file": "results/abyssal_sample-2/sample_report.html",
-        "report_format": "html"
+        "message": "HTML report generated",
+        "report_file": "data/api/reports/abyssal_sample-2_classification_report.html",
+        "report_format": "html",
+        "report_title": "eDNA Taxonomic Classification Report"
       }
     }
-  ]
+  ],
+  "current_step": "completed",
+  "current_message": "Classification and reporting completed",
+  "progress": 100
 }

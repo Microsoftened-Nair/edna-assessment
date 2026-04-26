@@ -1,0 +1,345 @@
+{
+  "sample_id": "Sample_2",
+  "input_type": "single",
+  "input_files": [
+    "/home/megh/edna/data/api/uploads/74b59a167cb145d492e28ddd3fa9c5ec_HMP_MOCK.v35.fasta"
+  ],
+  "output_dir": "results",
+  "start_time": "2026-03-29T04:14:25.451425+00:00",
+  "end_time": "2026-03-29T04:14:30.797489+00:00",
+  "processing_time": 5.345687,
+  "success": true,
+  "error": null,
+  "status": "completed",
+  "pipeline_steps": [
+    {
+      "step": "embedding_generation",
+      "status": "completed",
+      "results": {
+        "message": "Embeddings generated successfully",
+        "dnabert2_embeddings_file": "/home/megh/edna/results/Sample_2_dnabert2_embeddings.npz",
+        "total_classified": 32,
+        "embedding_shape": [
+          32,
+          768
+        ],
+        "model_name": "zhihan1996/DNABERT-2-117M",
+        "max_length": 256
+      }
+    },
+    {
+      "step": "taxonomic_classification",
+      "status": "completed",
+      "results": {
+        "message": "Classification generated successfully",
+        "classification_mode": "embedding_kmeans_fallback",
+        "classifier": "MiniBatchKMeans",
+        "total_classified": 32,
+        "mean_confidence": 31.88,
+        "confidence_distribution": {
+          "0-40": 32,
+          "40-60": 0,
+          "60-80": 0,
+          "80-90": 0,
+          "90-100": 0
+        },
+        "phylum_distribution": {
+          "OTU-004": 13,
+          "OTU-002": 8,
+          "OTU-001": 6,
+          "OTU-003": 5
+        },
+        "genus_distribution": {
+          "OTU-004": 13,
+          "OTU-002": 8,
+          "OTU-001": 6,
+          "OTU-003": 5
+        },
+        "species_distribution": {
+          "OTU-004": 13,
+          "OTU-002": 8,
+          "OTU-001": 6,
+          "OTU-003": 5
+        },
+        "detailed_file": "data/api/classifications/Sample_2_taxonomic_classifications.csv",
+        "summary_file": "data/api/classifications/Sample_2_classification_summary.json",
+        "predictions_file": "data/api/classifications/Sample_2_taxonomic_classifications.json",
+        "top_predictions": [
+          {
+            "sequence_id": "A.baumannii.1",
+            "kingdom": "Unknown",
+            "phylum": "OTU-002",
+            "class": "Unknown",
+            "order": "Unknown",
+            "family": "Unknown",
+            "genus": "OTU-002",
+            "species": "OTU-002",
+            "confidence": 30.82,
+            "method": "embedding_kmeans_fallback",
+            "predicted_label": "OTU-002"
+          },
+          {
+            "sequence_id": "A.odontolyticus.1",
+            "kingdom": "Unknown",
+            "phylum": "OTU-003",
+            "class": "Unknown",
+            "order": "Unknown",
+            "family": "Unknown",
+            "genus": "OTU-003",
+            "species": "OTU-003",
+            "confidence": 30.35,
+            "method": "embedding_kmeans_fallback",
+            "predicted_label": "OTU-003"
+          },
+          {
+            "sequence_id": "B.cereus.1",
+            "kingdom": "Unknown",
+            "phylum": "OTU-004",
+            "class": "Unknown",
+            "order": "Unknown",
+            "family": "Unknown",
+            "genus": "OTU-004",
+            "species": "OTU-004",
+            "confidence": 31.16,
+            "method": "embedding_kmeans_fallback",
+            "predicted_label": "OTU-004"
+          },
+          {
+            "sequence_id": "B.vulgatus.1",
+            "kingdom": "Unknown",
+            "phylum": "OTU-001",
+            "class": "Unknown",
+            "order": "Unknown",
+            "family": "Unknown",
+            "genus": "OTU-001",
+            "species": "OTU-001",
+            "confidence": 33.78,
+            "method": "embedding_kmeans_fallback",
+            "predicted_label": "OTU-001"
+          },
+          {
+            "sequence_id": "B.vulgatus.2",
+            "kingdom": "Unknown",
+            "phylum": "OTU-001",
+            "class": "Unknown",
+            "order": "Unknown",
+            "family": "Unknown",
+            "genus": "OTU-001",
+            "species": "OTU-001",
+            "confidence": 37.07,
+            "method": "embedding_kmeans_fallback",
+            "predicted_label": "OTU-001"
+          },
+          {
+            "sequence_id": "B.vulgatus.4",
+            "kingdom": "Unknown",
+            "phylum": "OTU-001",
+            "class": "Unknown",
+            "order": "Unknown",
+            "family": "Unknown",
+            "genus": "OTU-001",
+            "species": "OTU-001",
+            "confidence": 37.3,
+            "method": "embedding_kmeans_fallback",
+            "predicted_label": "OTU-001"
+          },
+          {
+            "sequence_id": "B.vulgatus.5",
+            "kingdom": "Unknown",
+            "phylum": "OTU-001",
+            "class": "Unknown",
+            "order": "Unknown",
+            "family": "Unknown",
+            "genus": "OTU-001",
+            "species": "OTU-001",
+            "confidence": 37.07,
+            "method": "embedding_kmeans_fallback",
+            "predicted_label": "OTU-001"
+          },
+          {
+            "sequence_id": "B.vulgatus.7",
+            "kingdom": "Unknown",
+            "phylum": "OTU-001",
+            "class": "Unknown",
+            "order": "Unknown",
+            "family": "Unknown",
+            "genus": "OTU-001",
+            "species": "OTU-001",
+            "confidence": 35.71,
+            "method": "embedding_kmeans_fallback",
+            "predicted_label": "OTU-001"
+          },
+          {
+            "sequence_id": "C.beijerinckii.1",
+            "kingdom": "Unknown",
+            "phylum": "OTU-003",
+            "class": "Unknown",
+            "order": "Unknown",
+            "family": "Unknown",
+            "genus": "OTU-003",
+            "species": "OTU-003",
+            "confidence": 31.9,
+            "method": "embedding_kmeans_fallback",
+            "predicted_label": "OTU-003"
+          },
+          {
+            "sequence_id": "C.beijerinckii.3",
+            "kingdom": "Unknown",
+            "phylum": "OTU-003",
+            "class": "Unknown",
+            "order": "Unknown",
+            "family": "Unknown",
+            "genus": "OTU-003",
+            "species": "OTU-003",
+            "confidence": 31.9,
+            "method": "embedding_kmeans_fallback",
+            "predicted_label": "OTU-003"
+          },
+          {
+            "sequence_id": "C.beijerinckii.4",
+            "kingdom": "Unknown",
+            "phylum": "OTU-003",
+            "class": "Unknown",
+            "order": "Unknown",
+            "family": "Unknown",
+            "genus": "OTU-003",
+            "species": "OTU-003",
+            "confidence": 31.9,
+            "method": "embedding_kmeans_fallback",
+            "predicted_label": "OTU-003"
+          },
+          {
+            "sequence_id": "D.radiodurans.1",
+            "kingdom": "Unknown",
+            "phylum": "OTU-002",
+            "class": "Unknown",
+            "order": "Unknown",
+            "family": "Unknown",
+            "genus": "OTU-002",
+            "species": "OTU-002",
+            "confidence": 28.23,
+            "method": "embedding_kmeans_fallback",
+            "predicted_label": "OTU-002"
+          },
+          {
+            "sequence_id": "E.faecalis.1",
+            "kingdom": "Unknown",
+            "phylum": "OTU-004",
+            "class": "Unknown",
+            "order": "Unknown",
+            "family": "Unknown",
+            "genus": "OTU-004",
+            "species": "OTU-004",
+            "confidence": 31.44,
+            "method": "embedding_kmeans_fallback",
+            "predicted_label": "OTU-004"
+          },
+          {
+            "sequence_id": "E.faecalis.2",
+            "kingdom": "Unknown",
+            "phylum": "OTU-004",
+            "class": "Unknown",
+            "order": "Unknown",
+            "family": "Unknown",
+            "genus": "OTU-004",
+            "species": "OTU-004",
+            "confidence": 31.44,
+            "method": "embedding_kmeans_fallback",
+            "predicted_label": "OTU-004"
+          },
+          {
+            "sequence_id": "E.coli.1",
+            "kingdom": "Unknown",
+            "phylum": "OTU-002",
+            "class": "Unknown",
+            "order": "Unknown",
+            "family": "Unknown",
+            "genus": "OTU-002",
+            "species": "OTU-002",
+            "confidence": 30.94,
+            "method": "embedding_kmeans_fallback",
+            "predicted_label": "OTU-002"
+          },
+          {
+            "sequence_id": "H.pylori.1",
+            "kingdom": "Unknown",
+            "phylum": "OTU-002",
+            "class": "Unknown",
+            "order": "Unknown",
+            "family": "Unknown",
+            "genus": "OTU-002",
+            "species": "OTU-002",
+            "confidence": 29.65,
+            "method": "embedding_kmeans_fallback",
+            "predicted_label": "OTU-002"
+          },
+          {
+            "sequence_id": "L.gasseri.1",
+            "kingdom": "Unknown",
+            "phylum": "OTU-004",
+            "class": "Unknown",
+            "order": "Unknown",
+            "family": "Unknown",
+            "genus": "OTU-004",
+            "species": "OTU-004",
+            "confidence": 30.8,
+            "method": "embedding_kmeans_fallback",
+            "predicted_label": "OTU-004"
+          },
+          {
+            "sequence_id": "L.monocytogenes.1",
+            "kingdom": "Unknown",
+            "phylum": "OTU-004",
+            "class": "Unknown",
+            "order": "Unknown",
+            "family": "Unknown",
+            "genus": "OTU-004",
+            "species": "OTU-004",
+            "confidence": 31.43,
+            "method": "embedding_kmeans_fallback",
+            "predicted_label": "OTU-004"
+          },
+          {
+            "sequence_id": "N.meningitidis.1",
+            "kingdom": "Unknown",
+            "phylum": "OTU-002",
+            "class": "Unknown",
+            "order": "Unknown",
+            "family": "Unknown",
+            "genus": "OTU-002",
+            "species": "OTU-002",
+            "confidence": 30.64,
+            "method": "embedding_kmeans_fallback",
+            "predicted_label": "OTU-002"
+          },
+          {
+            "sequence_id": "P.acnes.1",
+            "kingdom": "Unknown",
+            "phylum": "OTU-003",
+            "class": "Unknown",
+            "order": "Unknown",
+            "family": "Unknown",
+            "genus": "OTU-003",
+            "species": "OTU-003",
+            "confidence": 31.46,
+            "method": "embedding_kmeans_fallback",
+            "predicted_label": "OTU-003"
+          }
+        ]
+      }
+    },
+    {
+      "step": "report_generation",
+      "status": "completed",
+      "results": {
+        "message": "HTML report generated",
+        "report_file": "data/api/reports/Sample_2_classification_report.html",
+        "report_format": "html",
+        "report_title": "eDNA Taxonomic Classification Report"
+      }
+    }
+  ],
+  "current_step": "completed",
+  "current_message": "Classification and reporting completed",
+  "progress": 100
+}

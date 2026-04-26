@@ -1,18 +1,13 @@
-"""
-AI-Driven Deep-Sea eDNA Analysis Pipeline for Eukaryotic Biodiversity Assessment
-
-This package provides a comprehensive pipeline for analyzing environmental DNA (eDNA)
-from deep-sea ecosystems using artificial intelligence and machine learning approaches.
-
-The pipeline addresses the challenge of accurately identifying novel or poorly-represented
-deep-sea eukaryotic organisms by minimizing reliance on incomplete reference databases.
-"""
+"""Minimal eDNA pipeline package for pretrained DNABERT2 embedding generation."""
 
 __version__ = "1.0.0"
-__author__ = "Deep-Sea eDNA Analysis Team"
-__email__ = "contact@deep-sea-edna.org"
 
-from .pipeline import DeepSeaEDNAPipeline
-from .config import Config
+from .models import DNABERT2EmbeddingsExtractor
+from .taxonomy import EmbeddingTaxonomyClassifier
+from .visualization import create_classification_html_report
 
-__all__ = ["DeepSeaEDNAPipeline", "Config"]
+__all__ = [
+	"DNABERT2EmbeddingsExtractor",
+	"EmbeddingTaxonomyClassifier",
+	"create_classification_html_report",
+]

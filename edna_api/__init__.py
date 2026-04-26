@@ -1,4 +1,4 @@
-"""REST API surface for the Deep-Sea eDNA pipeline."""
+"""REST API surface for embeddings-only DNABERT2 runs."""
 
 from .server import create_app
 

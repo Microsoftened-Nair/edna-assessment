@@ -1,0 +1,31 @@
+{
+  "total_classified": 32,
+  "mean_confidence": 31.88,
+  "classification_mode": "embedding_kmeans_fallback",
+  "classifier": "MiniBatchKMeans",
+  "phylum_distribution": {
+    "OTU-004": 13,
+    "OTU-002": 8,
+    "OTU-001": 6,
+    "OTU-003": 5
+  },
+  "genus_distribution": {
+    "OTU-004": 13,
+    "OTU-002": 8,
+    "OTU-001": 6,
+    "OTU-003": 5
+  },
+  "species_distribution": {
+    "OTU-004": 13,
+    "OTU-002": 8,
+    "OTU-001": 6,
+    "OTU-003": 5
+  },
+  "confidence_distribution": {
+    "0-40": 32,
+    "40-60": 0,
+    "60-80": 0,
+    "80-90": 0,
+    "90-100": 0
+  }
+}

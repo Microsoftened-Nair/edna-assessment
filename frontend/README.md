@@ -23,7 +23,11 @@ The app defaults to mock data so you can explore the UI instantly. To connect to
 ```bash
 export VITE_API_URL="http://localhost:8000/api"
 export VITE_USE_MOCK="false"
+export VITE_API_USERNAME="admin"
+export VITE_API_PASSWORD="password123"
 ```
+
+The client auto-signs in to `POST /api/auth/login` and attaches `Authorization: Bearer <token>` for protected endpoints.
 
 ## Project Structure
 

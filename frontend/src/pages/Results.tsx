@@ -19,7 +19,7 @@ const statusLabel = (run: PipelineRun): { label: string; pillClass: string } => 
 };
 
 const Results = () => {
-  const { data: runs, loading } = useAsyncData(api.fetchRecentRuns, [], {
+  const { data: runs, loading, error } = useAsyncData(api.fetchRecentRuns, [], {
     pollIntervalMs: 2000
   });
 
@@ -33,6 +33,8 @@ const Results = () => {
         <div className="page-grid" style={{ gap: "18px" }}>
           {loading ? (
             <div className="empty-state">Loading recent runs...</div>
+          ) : error ? (
+            <div className="empty-state">Failed to load runs from API. Check backend connectivity/auth and refresh.</div>
           ) : runs && runs.length > 0 ? (
             runs.map((run: PipelineRun) => {
               const classification = run.pipeline_steps.find((step) => step.step === "taxonomic_classification");
@@ -70,6 +72,9 @@ const Results = () => {
                   : state === "queued"
                   ? "Queued for execution"
                   : "Completed successfully";
+
+              const progress = Math.max(0, Math.min(100, run.progress ?? 0));
+              const showLiveProgress = state === "running" || state === "queued" || state === "pending";
               return (
                 <div key={run.sample_id} className="card card--interactive" style={{ display: "grid", gap: "12px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -105,6 +110,27 @@ const Results = () => {
                       <span>{totalReads ? totalReads.toLocaleString() : "--"}</span>
                     </div>
                   </div>
+
+                  {showLiveProgress ? (
+                    <div style={{ display: "grid", gap: "8px" }}>
+                      <div style={{ fontSize: "13px", color: "var(--text-muted)" }}>
+                        {run.current_message ?? "Processing..."}
+                      </div>
+                      <div style={{ height: "8px", width: "100%", borderRadius: "999px", background: "rgba(255,255,255,0.08)", overflow: "hidden" }}>
+                        <div
+                          style={{
+                            height: "100%",
+                            width: `${progress}%`,
+                            background: "linear-gradient(90deg, var(--accent), #43d29d)",
+                            transition: "width 300ms ease"
+                          }}
+                        />
+                      </div>
+                      <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>
+                        {progress.toFixed(0)}% complete{run.current_step ? ` • ${run.current_step.replace(/_/g, " ")}` : ""}
+                      </div>
+                    </div>
+                  ) : null}
 
                   <div className="results-card__chart">
                     <div className="form-control" style={{ margin: 0 }}>

@@ -16,7 +16,7 @@ const mockRuns: PipelineRun[] = [
   {
     sample_id: "abyssal_ridge_01",
     input_type: "paired",
-    input_files: ["/demo/raw/abyssal_ridge_01_R1.fastq", "/demo/raw/abyssal_ridge_01_R2.fastq"],
+    input_files: ["/demo/raw/abyssal_ridge_01_R1.fasta", "/demo/raw/abyssal_ridge_01_R2.fasta"],
     output_dir: "/demo/results/abyssal_ridge_01",
     start_time: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
     end_time: new Date(Date.now() - 1000 * 60 * 35).toISOString(),
@@ -83,7 +83,7 @@ const mockRuns: PipelineRun[] = [
   {
     sample_id: "hydrothermal_vent_12",
     input_type: "single",
-    input_files: ["/demo/raw/hydrothermal_vent_12.fastq"],
+    input_files: ["/demo/raw/hydrothermal_vent_12.fasta"],
     output_dir: "/demo/results/hydrothermal_vent_12",
     start_time: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
     end_time: new Date(Date.now() - 1000 * 60 * 110).toISOString(),
@@ -244,7 +244,7 @@ export const mockApi = {
     return {
       sample_id: runId,
       input_type: "single",
-      input_files: ["/demo/raw/" + runId + ".fastq"],
+      input_files: ["/demo/raw/" + runId + ".fasta"],
       output_dir: "/demo/results/" + runId,
       start_time: nowIso(),
       success: false,

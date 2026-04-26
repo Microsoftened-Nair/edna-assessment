@@ -1,4 +1,5 @@
 export type PipelineStepKey =
+  | "embedding_generation"
   | "preprocessing"
   | "feature_extraction"
   | "taxonomic_classification"
@@ -24,15 +25,25 @@ export interface PipelineRun {
   success: boolean;
   error?: string;
   status?: "queued" | "running" | "completed" | "failed" | string;
+  current_step?: string;
+  current_message?: string;
+  progress?: number;
   pipeline_steps: PipelineStep[];
 }
 
 export interface TaxonomySummary {
   mean_confidence: number;
   phylum_distribution: Record<string, number>;
-  classification_method: string;
+  genus_distribution?: Record<string, number>;
+  species_distribution?: Record<string, number>;
+  confidence_distribution?: Record<string, number>;
+  classification_method?: string;
+  classification_mode?: string;
+  classifier?: string;
   total_classified: number;
   summary_file?: string;
+  detailed_file?: string;
+  predictions_file?: string;
 }
 
 export interface AbundanceSummary {

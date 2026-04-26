@@ -1,25 +1,27 @@
 import { useEffect, useState } from "react";
-import { FiSave, FiToggleLeft, FiToggleRight } from "react-icons/fi";
+import { FiSave } from "react-icons/fi";
 
 interface SettingsState {
-  autoSyncDatabases: boolean;
-  enableStreaming: boolean;
-  gpuAcceleration: boolean;
   defaultOutputDir: string;
-  maxConcurrentJobs: number;
-  enableCodexPreview: boolean;
+  defaultInputType: "single" | "paired";
+  modelName: string;
+  maxLength: number;
+  batchSize: number;
+  device: "auto" | "cpu" | "cuda";
+  runPollIntervalMs: number;
 }
 
-const defaultSettings: SettingsState = {
-  autoSyncDatabases: true,
-  enableStreaming: false,
-  gpuAcceleration: true,
-  defaultOutputDir: "results",
-  maxConcurrentJobs: 4,
-  enableCodexPreview: true
-};
+export const SETTINGS_STORAGE_KEY = "edna-app-settings";
 
-const SETTINGS_STORAGE_KEY = "edna-app-settings";
+const defaultSettings: SettingsState = {
+  defaultOutputDir: "results",
+  defaultInputType: "single",
+  modelName: "zhihan1996/DNABERT-2-117M",
+  maxLength: 256,
+  batchSize: 16,
+  device: "auto",
+  runPollIntervalMs: 2000
+};
 
 const Settings = () => {
   const [settings, setSettings] = useState<SettingsState>(defaultSettings);
@@ -40,14 +42,6 @@ const Settings = () => {
     }
   }, []);
 
-  const handleToggle = (key: keyof SettingsState) => {
-    setSaved(false);
-    setSettings((state: SettingsState) => ({
-      ...state,
-      [key]: typeof state[key] === "boolean" ? !state[key] : state[key]
-    }));
-  };
-
   const handleInput = <K extends keyof SettingsState>(key: K, value: SettingsState[K]) => {
     setSaved(false);
     setSettings((state: SettingsState) => ({ ...state, [key]: value }));
@@ -64,68 +58,12 @@ const Settings = () => {
     <div className="page-grid" style={{ gap: "24px", maxWidth: "900px" }}>
       <section className="card" style={{ display: "grid", gap: "18px" }}>
         <div className="section-title">
-          <h3>Operational preferences</h3>
-          <span>Adjust pipeline defaults and infrastructure options</span>
+          <h3>Embeddings run defaults</h3>
+          <span>Defaults used by Single Run and Batch Run launch forms</span>
         </div>
         <div className="page-grid" style={{ gap: "16px" }}>
-          <div className="card" style={{ padding: "18px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <div>
-              <div style={{ fontWeight: 600 }}>Database auto-sync</div>
-              <div style={{ color: "var(--text-muted)", fontSize: "13px" }}>
-                Periodically refresh NCBI resources according to cron schedule.
-              </div>
-            </div>
-            <button type="button" className="secondary-button" onClick={() => handleToggle("autoSyncDatabases")}
-              aria-pressed={settings.autoSyncDatabases}
-            >
-              {settings.autoSyncDatabases ? <FiToggleRight size={22} /> : <FiToggleLeft size={22} />}
-            </button>
-          </div>
-
-          <div className="card" style={{ padding: "18px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <div>
-              <div style={{ fontWeight: 600 }}>Realtime telemetry</div>
-              <div style={{ color: "var(--text-muted)", fontSize: "13px" }}>
-                Stream pipeline events to the dashboard via WebSockets.
-              </div>
-            </div>
-            <button type="button" className="secondary-button" onClick={() => handleToggle("enableStreaming")}
-              aria-pressed={settings.enableStreaming}
-            >
-              {settings.enableStreaming ? <FiToggleRight size={22} /> : <FiToggleLeft size={22} />}
-            </button>
-          </div>
-
-          <div className="card" style={{ padding: "18px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <div>
-              <div style={{ fontWeight: 600 }}>GPU acceleration</div>
-              <div style={{ color: "var(--text-muted)", fontSize: "13px" }}>
-                Offload deep learning stages to CUDA-compatible devices.
-              </div>
-            </div>
-            <button type="button" className="secondary-button" onClick={() => handleToggle("gpuAcceleration")}
-              aria-pressed={settings.gpuAcceleration}
-            >
-              {settings.gpuAcceleration ? <FiToggleRight size={22} /> : <FiToggleLeft size={22} />}
-            </button>
-          </div>
-
-          <div className="card" style={{ padding: "18px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <div>
-              <div style={{ fontWeight: 600 }}>GPT-5-Codex preview</div>
-              <div style={{ color: "var(--text-muted)", fontSize: "13px" }}>
-                Enable GPT-5-Codex (Preview) capabilities for all analyst clients.
-              </div>
-            </div>
-            <button type="button" className="secondary-button" onClick={() => handleToggle("enableCodexPreview")}
-              aria-pressed={settings.enableCodexPreview}
-            >
-              {settings.enableCodexPreview ? <FiToggleRight size={22} /> : <FiToggleLeft size={22} />}
-            </button>
-          </div>
-
           <div className="card" style={{ padding: "18px", display: "grid", gap: "12px" }}>
-            <div style={{ fontWeight: 600 }}>Defaults</div>
+            <div style={{ fontWeight: 600 }}>Run configuration</div>
             <div className="form-control">
               <label htmlFor="output-dir">Output directory</label>
               <input
@@ -135,14 +73,68 @@ const Settings = () => {
               />
             </div>
             <div className="form-control">
-              <label htmlFor="max-jobs">Max concurrent runs</label>
+              <label htmlFor="default-input-type">Default input type</label>
+              <select
+                id="default-input-type"
+                value={settings.defaultInputType}
+                onChange={(event) => handleInput("defaultInputType", event.target.value as SettingsState["defaultInputType"])}
+              >
+                <option value="single">Single-end</option>
+                <option value="paired">Paired-end</option>
+              </select>
+            </div>
+            <div className="form-control">
+              <label htmlFor="model-name">Model name</label>
               <input
-                id="max-jobs"
+                id="model-name"
+                value={settings.modelName}
+                onChange={(event) => handleInput("modelName", event.target.value)}
+              />
+            </div>
+            <div className="form-control">
+              <label htmlFor="max-length">Max token length</label>
+              <input
+                id="max-length"
                 type="number"
-                value={settings.maxConcurrentJobs}
-                onChange={(event) => handleInput("maxConcurrentJobs", Number(event.target.value))}
+                value={settings.maxLength}
+                onChange={(event) => handleInput("maxLength", Number(event.target.value))}
+                min={32}
+                max={2048}
+              />
+            </div>
+            <div className="form-control">
+              <label htmlFor="batch-size">Batch size</label>
+              <input
+                id="batch-size"
+                type="number"
+                value={settings.batchSize}
+                onChange={(event) => handleInput("batchSize", Number(event.target.value))}
                 min={1}
-                max={32}
+                max={512}
+              />
+            </div>
+            <div className="form-control">
+              <label htmlFor="device">Preferred device</label>
+              <select
+                id="device"
+                value={settings.device}
+                onChange={(event) => handleInput("device", event.target.value as SettingsState["device"])}
+              >
+                <option value="auto">Auto-detect</option>
+                <option value="cpu">CPU</option>
+                <option value="cuda">CUDA</option>
+              </select>
+            </div>
+            <div className="form-control">
+              <label htmlFor="poll-interval">Run poll interval (ms)</label>
+              <input
+                id="poll-interval"
+                type="number"
+                value={settings.runPollIntervalMs}
+                onChange={(event) => handleInput("runPollIntervalMs", Number(event.target.value))}
+                min={500}
+                max={10000}
+                step={100}
               />
             </div>
           </div>
@@ -151,7 +143,7 @@ const Settings = () => {
           <button type="button" className="primary-button" onClick={handleSave}>
             <FiSave /> Save preferences
           </button>
-          {saved ? <span style={{ color: "var(--accent)" }}>Settings updated (mock)</span> : null}
+          {saved ? <span style={{ color: "var(--accent)" }}>Settings saved</span> : null}
         </div>
       </section>
     </div>

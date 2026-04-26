@@ -1,0 +1,74 @@
+{
+  "sample_id": "hello2",
+  "input_type": "single",
+  "input_files": [
+    "/home/megh/edna/data/api/uploads/b33b0b8c0faf4e9da7fc93821aa68b73_silva.bacteria.fasta"
+  ],
+  "output_dir": "results",
+  "start_time": "2026-03-28T15:17:37.223780+00:00",
+  "end_time": "2026-03-28T15:31:07.082126+00:00",
+  "processing_time": 809.773659,
+  "success": true,
+  "error": null,
+  "status": "completed",
+  "pipeline_steps": [
+    {
+      "step": "embedding_generation",
+      "status": "completed",
+      "results": {
+        "message": "DNABERT2 embedding generation completed",
+        "dnabert2_embeddings_file": "/home/megh/edna/results/hello2_dnabert2_embeddings.npz",
+        "total_classified": 14956,
+        "embedding_shape": [
+          14956,
+          768
+        ],
+        "model_name": "zhihan1996/DNABERT-2-117M",
+        "max_length": 256
+      }
+    },
+    {
+      "step": "taxonomic_classification",
+      "status": "completed",
+      "results": {
+        "message": "Classification generated successfully (backfilled)",
+        "classification_mode": "embedding_kmeans_fallback",
+        "classifier": "MiniBatchKMeans",
+        "total_classified": 14956,
+        "mean_confidence": 8.33,
+        "confidence_distribution": {
+          "0-40": 14956,
+          "40-60": 0,
+          "60-80": 0,
+          "80-90": 0,
+          "90-100": 0
+        },
+        "phylum_distribution": {
+          "OTU-010": 14956
+        },
+        "genus_distribution": {
+          "OTU-010": 14956
+        },
+        "species_distribution": {
+          "OTU-010": 14956
+        },
+        "detailed_file": "/home/megh/edna/data/api/classifications/hello2_taxonomic_classifications.csv",
+        "summary_file": "/home/megh/edna/data/api/classifications/hello2_classification_summary.json",
+        "predictions_file": "/home/megh/edna/data/api/classifications/hello2_taxonomic_classifications.json"
+      }
+    },
+    {
+      "step": "report_generation",
+      "status": "completed",
+      "results": {
+        "message": "HTML report generated (backfilled)",
+        "report_file": "/home/megh/edna/data/api/reports/hello2_classification_report.html",
+        "report_format": "html",
+        "report_title": "eDNA Taxonomic Classification Report"
+      }
+    }
+  ],
+  "current_step": "completed",
+  "current_message": "Classification and reporting completed (backfilled from embeddings)",
+  "progress": 100
+}

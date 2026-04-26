@@ -1,0 +1,22 @@
+{
+  "total_classified": 32,
+  "mean_confidence": 5.23,
+  "classification_mode": "supervised_taxonomy",
+  "classifier": "embedding_model_bundle.joblib",
+  "phylum_distribution": {
+    "Bacteria": 32
+  },
+  "genus_distribution": {
+    "Actinomycetales": 32
+  },
+  "species_distribution": {
+    "Streptomycineae": 32
+  },
+  "confidence_distribution": {
+    "0-40": 32,
+    "40-60": 0,
+    "60-80": 0,
+    "80-90": 0,
+    "90-100": 0
+  }
+}

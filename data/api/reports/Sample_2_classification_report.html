@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Classification Report - Sample_2</title>
+  <style>
+    :root {
+      --bg-primary: #0b1324;
+      --bg-secondary: #111c33;
+      --bg-elevated: #182642;
+      --accent: #2be38b;
+      --accent-soft: rgba(43, 227, 139, 0.12);
+      --text-primary: #f5f7fb;
+      --text-secondary: #c8d3eb;
+      --text-muted: #8591ac;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.35);
+      --font-family: Inter, Segoe UI, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 28px;
+      font-family: var(--font-family);
+      color: var(--text-primary);
+      background:
+        radial-gradient(circle at top left, rgba(43, 227, 139, 0.08), transparent 40%),
+        radial-gradient(circle at bottom right, rgba(43, 227, 139, 0.05), transparent 35%),
+        var(--bg-primary);
+      line-height: 1.45;
+    }
+
+    .report {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      gap: 18px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(24, 38, 66, 0.92), rgba(17, 28, 51, 0.95));
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 24px;
+      display: grid;
+      gap: 10px;
+    }
+
+    h1, h2, h3 { margin: 0; }
+    h1 { font-size: 28px; letter-spacing: 0.2px; }
+    h2 { font-size: 20px; }
+    h3 { font-size: 17px; color: var(--text-secondary); }
+
+    .muted { color: var(--text-muted); margin: 0; }
+
+    .cards {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .label { color: var(--text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .value { font-size: 22px; font-weight: 650; word-break: break-all; min-width: 0; }
+
+    .grid-two {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    }
+
+    .panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .distribution-grid { display: grid; gap: 8px; }
+
+    .distribution-row-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 13px;
+    }
+
+    .bar-track {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #0fbf76);
+      border-radius: 999px;
+    }
+
+    .table-wrapper { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 900px;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--border-color);
+      text-align: left;
+      padding: 10px 8px;
+      white-space: nowrap;
+    }
+
+    th { color: var(--text-secondary); font-weight: 600; }
+
+    .footnote {
+      color: var(--text-muted);
+      font-size: 12px;
+      text-align: right;
+    }
+
+    @media (max-width: 720px) {
+      body { padding: 14px; }
+      .hero { padding: 16px; }
+      .panel { padding: 14px; }
+      .value { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="report">
+    <section class="hero">
+      <h1>eDNA Taxonomic Classification Report</h1>
+      <p class="muted">Sample <strong>Sample_2</strong> • Generated 2026-03-29 04:14:30 UTC</p>
+      <div class="cards">
+        <article class="card"><div class="label">Classified Sequences</div><div class="value">32</div></article>
+        <article class="card"><div class="label">Mean Confidence</div><div class="value">31.88%</div></article>
+        <article class="card"><div class="label">Classification Mode</div><div class="value">embedding_kmeans_fallback</div></article>
+        <article class="card"><div class="label">Classifier</div><div class="value">MiniBatchKMeans</div></article>
+      </div>
+      <p class="muted">Run started: 2026-03-29T04:14:25.451425+00:00 • Completed: 2026-03-29T04:14:30.796912+00:00 • Duration: 5.3s</p>
+    </section>
+
+    <section class="grid-two">
+      
+<section class="panel">
+  <h3>Phylum / Cluster Composition</h3>
+  <div class="distribution-grid">
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>OTU-004</span>
+    <span>13 (40.6%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 40.62%"></div></div>
+</div>
+
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>OTU-002</span>
+    <span>8 (25.0%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 25.00%"></div></div>
+</div>
+
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>OTU-001</span>
+    <span>6 (18.8%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 18.75%"></div></div>
+</div>
+
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>OTU-003</span>
+    <span>5 (15.6%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 15.62%"></div></div>
+</div>
+</div>
+</section>
+
+      
+<section class="panel">
+  <h3>Genus Composition</h3>
+  <div class="distribution-grid">
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>OTU-004</span>
+    <span>13 (40.6%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 40.62%"></div></div>
+</div>
+
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>OTU-002</span>
+    <span>8 (25.0%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 25.00%"></div></div>
+</div>
+
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>OTU-001</span>
+    <span>6 (18.8%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 18.75%"></div></div>
+</div>
+
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>OTU-003</span>
+    <span>5 (15.6%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 15.62%"></div></div>
+</div>
+</div>
+</section>
+
+      
+<section class="panel">
+  <h3>Species Composition</h3>
+  <div class="distribution-grid">
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>OTU-004</span>
+    <span>13 (40.6%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 40.62%"></div></div>
+</div>
+
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>OTU-002</span>
+    <span>8 (25.0%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 25.00%"></div></div>
+</div>
+
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>OTU-001</span>
+    <span>6 (18.8%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 18.75%"></div></div>
+</div>
+
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>OTU-003</span>
+    <span>5 (15.6%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 15.62%"></div></div>
+</div>
+</div>
+</section>
+
+      
+<section class="panel">
+  <h3>Confidence Distribution</h3>
+  <div class="distribution-grid">
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>0-40</span>
+    <span>32 (100.0%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 100.00%"></div></div>
+</div>
+
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>40-60</span>
+    <span>0 (0.0%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 2.00%"></div></div>
+</div>
+
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>60-80</span>
+    <span>0 (0.0%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 2.00%"></div></div>
+</div>
+
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>80-90</span>
+    <span>0 (0.0%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 2.00%"></div></div>
+</div>
+
+<div class="distribution-row">
+  <div class="distribution-row-header">
+    <span>90-100</span>
+    <span>0 (0.0%)</span>
+  </div>
+  <div class="bar-track"><div class="bar-fill" style="width: 2.00%"></div></div>
+</div>
+</div>
+</section>
+
+    </section>
+
+    
+<section class="panel">
+  <h3>Per-Sequence Classification Preview</h3>
+  <p class="muted">Showing up to 200 sequences.</p>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Sequence ID</th>
+          <th>Kingdom</th>
+          <th>Phylum / Cluster</th>
+          <th>Genus</th>
+          <th>Species</th>
+          <th>Confidence</th>
+          <th>Method</th>
+        </tr>
+      </thead>
+      <tbody>
+<tr>
+  <td>A.baumannii.1</td>
+  <td>Unknown</td>
+  <td>OTU-002</td>
+  <td>OTU-002</td>
+  <td>OTU-002</td>
+  <td>30.82%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>A.odontolyticus.1</td>
+  <td>Unknown</td>
+  <td>OTU-003</td>
+  <td>OTU-003</td>
+  <td>OTU-003</td>
+  <td>30.35%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>B.cereus.1</td>
+  <td>Unknown</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>31.16%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>B.vulgatus.1</td>
+  <td>Unknown</td>
+  <td>OTU-001</td>
+  <td>OTU-001</td>
+  <td>OTU-001</td>
+  <td>33.78%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>B.vulgatus.2</td>
+  <td>Unknown</td>
+  <td>OTU-001</td>
+  <td>OTU-001</td>
+  <td>OTU-001</td>
+  <td>37.07%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>B.vulgatus.4</td>
+  <td>Unknown</td>
+  <td>OTU-001</td>
+  <td>OTU-001</td>
+  <td>OTU-001</td>
+  <td>37.30%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>B.vulgatus.5</td>
+  <td>Unknown</td>
+  <td>OTU-001</td>
+  <td>OTU-001</td>
+  <td>OTU-001</td>
+  <td>37.07%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>B.vulgatus.7</td>
+  <td>Unknown</td>
+  <td>OTU-001</td>
+  <td>OTU-001</td>
+  <td>OTU-001</td>
+  <td>35.71%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>C.beijerinckii.1</td>
+  <td>Unknown</td>
+  <td>OTU-003</td>
+  <td>OTU-003</td>
+  <td>OTU-003</td>
+  <td>31.90%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>C.beijerinckii.3</td>
+  <td>Unknown</td>
+  <td>OTU-003</td>
+  <td>OTU-003</td>
+  <td>OTU-003</td>
+  <td>31.90%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>C.beijerinckii.4</td>
+  <td>Unknown</td>
+  <td>OTU-003</td>
+  <td>OTU-003</td>
+  <td>OTU-003</td>
+  <td>31.90%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>D.radiodurans.1</td>
+  <td>Unknown</td>
+  <td>OTU-002</td>
+  <td>OTU-002</td>
+  <td>OTU-002</td>
+  <td>28.23%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>E.faecalis.1</td>
+  <td>Unknown</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>31.44%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>E.faecalis.2</td>
+  <td>Unknown</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>31.44%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>E.coli.1</td>
+  <td>Unknown</td>
+  <td>OTU-002</td>
+  <td>OTU-002</td>
+  <td>OTU-002</td>
+  <td>30.94%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>H.pylori.1</td>
+  <td>Unknown</td>
+  <td>OTU-002</td>
+  <td>OTU-002</td>
+  <td>OTU-002</td>
+  <td>29.65%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>L.gasseri.1</td>
+  <td>Unknown</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>30.80%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>L.monocytogenes.1</td>
+  <td>Unknown</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>31.43%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>N.meningitidis.1</td>
+  <td>Unknown</td>
+  <td>OTU-002</td>
+  <td>OTU-002</td>
+  <td>OTU-002</td>
+  <td>30.64%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>P.acnes.1</td>
+  <td>Unknown</td>
+  <td>OTU-003</td>
+  <td>OTU-003</td>
+  <td>OTU-003</td>
+  <td>31.46%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>P.aeruginosa.1</td>
+  <td>Unknown</td>
+  <td>OTU-002</td>
+  <td>OTU-002</td>
+  <td>OTU-002</td>
+  <td>31.81%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>P.aeruginosa.2</td>
+  <td>Unknown</td>
+  <td>OTU-002</td>
+  <td>OTU-002</td>
+  <td>OTU-002</td>
+  <td>31.81%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>P.gingivalis.1</td>
+  <td>Unknown</td>
+  <td>OTU-001</td>
+  <td>OTU-001</td>
+  <td>OTU-001</td>
+  <td>29.94%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>R.sphaeroides.1</td>
+  <td>Unknown</td>
+  <td>OTU-002</td>
+  <td>OTU-002</td>
+  <td>OTU-002</td>
+  <td>29.97%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>S.aureus.1</td>
+  <td>Unknown</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>32.28%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>S.aureus.5</td>
+  <td>Unknown</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>32.28%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>S.epidermidis.1</td>
+  <td>Unknown</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>32.91%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>S.epidermidis.2</td>
+  <td>Unknown</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>32.87%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>S.epidermidis.5</td>
+  <td>Unknown</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>33.07%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>S.agalactiae.1</td>
+  <td>Unknown</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>30.04%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>S.mutans.1</td>
+  <td>Unknown</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>29.17%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+
+<tr>
+  <td>S.pneumoniae.1</td>
+  <td>Unknown</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>OTU-004</td>
+  <td>28.97%</td>
+  <td>embedding_kmeans_fallback</td>
+</tr>
+</tbody>
+    </table>
+  </div>
+</section>
+
+
+    <p class="footnote">This report is generated automatically from run artifacts and is intended for analytical review.</p>
+  </main>
+</body>
+</html>

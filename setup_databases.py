@@ -139,24 +139,55 @@ Examples:
         return 1
     
     logger.info(f"Database directory: {db_manager.db_dir}")
+
+    if args.recommended:
+        logger.info("Downloading recommended databases for eDNA analysis")
+        results = db_manager.download_recommended_databases(
+            extract=not args.no_extract,
+            cleanup_tar=not args.keep_tar,
+        )
+
+        success_count = sum(1 for ok in results.values() if ok)
+        total_count = len(results)
+        failed_downloads = [name for name, ok in results.items() if not ok]
+
+        print(f"\n{'='*60}")
+        print("DOWNLOAD SUMMARY")
+        print(f"{'='*60}")
+        print(f"Successfully downloaded: {success_count}/{total_count} databases")
+
+        if failed_downloads:
+            print(f"Failed downloads: {failed_downloads}")
+            print("You can retry failed downloads by running the script again.")
+
+        if success_count > 0:
+            logger.info("\nChecking BLAST database availability...")
+            blast_status = db_manager.create_blast_databases()
+            available_blast_dbs = [db for db, status in blast_status.items() if status]
+            if available_blast_dbs:
+                print(f"\nBLAST databases ready: {available_blast_dbs}")
+
+        print(f"\nDatabase directory: {db_manager.db_dir}")
+
+        if success_count > 0:
+            print("\nNEXT STEPS:")
+            print("-" * 20)
+            print("1. The databases are now ready for use with the eDNA pipeline")
+            print("2. You can run the pipeline using:")
+            print("   python example_usage.py")
+            print("3. Or integrate with your own scripts using:")
+            print("   from edna_pipeline import EDNAPipeline")
+            print("\nOPTIONAL:")
+            print("Consider downloading 'core_nt' for more comprehensive analysis:")
+            print("python setup_databases.py --databases core_nt")
+            print("(Warning: This is ~200GB and will take significant time/space)")
+
+        return 0 if success_count == total_count else 1
     
     # Determine which databases to download
     databases_to_download = []
     
-    if args.recommended:
-        # Download recommended databases for eDNA analysis
-        databases_to_download = [
-            "taxdb",  # Critical - always needed
-            "16S_ribosomal_RNA",  # High priority - prokaryotes
-            "18S_fungal_sequences",  # High priority - fungi  
-            "28S_fungal_sequences",  # High priority - fungi
-            "ITS_eukaryote_sequences",  # High priority - eukaryotes
-            "ITS_RefSeq_Fungi",  # High priority - fungi
-        ]
-        
-        logger.info("Downloading recommended databases for eDNA analysis")
-        
-    elif args.small_only:
+    if args.small_only:
         # Download only small databases
         small_dbs = [
             "taxdb", "16S_ribosomal_RNA", "18S_fungal_sequences",

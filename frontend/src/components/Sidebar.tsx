@@ -1,4 +1,4 @@
-import { FiArrowRight, FiX } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
 import type { IconType } from "react-icons";
 import { NavLink } from "react-router-dom";
 import clsx from "clsx";

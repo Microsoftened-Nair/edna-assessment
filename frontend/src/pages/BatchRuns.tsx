@@ -8,7 +8,29 @@ interface BatchSample extends RunRequestPayload {
   id: string;
 }
 
-const allowedFastqExtensions = [".fastq", ".fq", ".fastq.gz", ".fq.gz"] as const;
+interface AppSettings {
+  defaultOutputDir: string;
+  defaultInputType: "single" | "paired";
+  modelName: string;
+  maxLength: number;
+  batchSize: number;
+  device: "auto" | "cpu" | "cuda";
+  runPollIntervalMs: number;
+}
+
+const SETTINGS_STORAGE_KEY = "edna-app-settings";
+
+const DEFAULT_APP_SETTINGS: AppSettings = {
+  defaultOutputDir: "results",
+  defaultInputType: "single",
+  modelName: "zhihan1996/DNABERT-2-117M",
+  maxLength: 256,
+  batchSize: 16,
+  device: "auto",
+  runPollIntervalMs: 2000
+};
+
+const allowedFastaExtensions = [".fasta", ".fa", ".fasta.gz", ".fa.gz"] as const;
 type UploadSlot = "forward" | "reverse";
 
 interface UploadSlotState {
@@ -23,19 +45,43 @@ type SampleUploadState = Record<UploadSlot, UploadSlotState>;
 const createSlotState = (): UploadSlotState => ({ uploading: false, dragging: false });
 const defaultUploadState = (): SampleUploadState => ({ forward: createSlotState(), reverse: createSlotState() });
 
-const createSample = (index: number): BatchSample => {
+const createSample = (index: number, defaultInputType: "single" | "paired" = "single"): BatchSample => {
   const fallbackId = `sample-${index}-${Math.random().toString(16).slice(2, 10)}`;
   const generatedId = typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : fallbackId;
   return {
     id: generatedId,
     sampleId: `sample_${index + 1}`,
-    inputType: "paired",
-    files: ["", ""],
+    inputType: defaultInputType,
+    files: defaultInputType === "paired" ? ["", ""] : [""],
     configOverrides: {}
   };
 };
 
+const loadAppSettings = (): AppSettings => {
+  if (typeof window === "undefined") {
+    return DEFAULT_APP_SETTINGS;
+  }
+
+  try {
+    const raw = window.localStorage.getItem(SETTINGS_STORAGE_KEY);
+    if (!raw) {
+      return DEFAULT_APP_SETTINGS;
+    }
+    const parsed = JSON.parse(raw) as Partial<AppSettings>;
+    return {
+      ...DEFAULT_APP_SETTINGS,
+      ...parsed,
+      maxLength: Number(parsed.maxLength ?? DEFAULT_APP_SETTINGS.maxLength),
+      batchSize: Number(parsed.batchSize ?? DEFAULT_APP_SETTINGS.batchSize),
+      runPollIntervalMs: Number(parsed.runPollIntervalMs ?? DEFAULT_APP_SETTINGS.runPollIntervalMs)
+    };
+  } catch {
+    return DEFAULT_APP_SETTINGS;
+  }
+};
+
 const BatchRuns = () => {
+  const [appSettings, setAppSettings] = useState<AppSettings>(DEFAULT_APP_SETTINGS);
   const initialSamplesRef = useRef<BatchSample[] | null>(null);
   if (!initialSamplesRef.current) {
     initialSamplesRef.current = [createSample(0), createSample(1)];
@@ -59,6 +105,10 @@ const BatchRuns = () => {
   useEffect(() => () => {
     isMountedRef.current = false;
     pollingBatchIdRef.current = null;
+  }, []);
+
+  useEffect(() => {
+    setAppSettings(loadAppSettings());
   }, []);
 
   useEffect(() => {
@@ -92,8 +142,8 @@ const BatchRuns = () => {
     }
   }, [samples]);
 
-  const isValidFastq = (filename: string) =>
-    allowedFastqExtensions.some((extension) => filename.toLowerCase().endsWith(extension));
+  const isValidFasta = (filename: string) =>
+    allowedFastaExtensions.some((extension) => filename.toLowerCase().endsWith(extension));
 
   const updateUploadSlot = (sampleId: string, slot: UploadSlot, partial: Partial<UploadSlotState>) => {
     setUploadState((state) => {
@@ -162,11 +212,11 @@ const BatchRuns = () => {
   };
 
   const handleFileUpload = async (sampleId: string, slot: UploadSlot, file: File) => {
-    if (!isValidFastq(file.name)) {
+    if (!isValidFasta(file.name)) {
       updateUploadSlot(sampleId, slot, {
         uploading: false,
         name: undefined,
-        error: "Unsupported file type. Upload .fastq, .fq, or .fastq.gz files.",
+        error: "Unsupported file type. Upload .fasta, .fa, or .gz versions of these.",
         dragging: false
       });
       return;
@@ -307,7 +357,7 @@ const BatchRuns = () => {
           }}
           role="button"
           tabIndex={0}
-          aria-label={`Upload ${slot === "forward" ? "forward" : "reverse"} FASTQ for ${
+          aria-label={`Upload ${slot === "forward" ? "forward" : "reverse"} FASTA for ${
             sample.sampleId || "sample"
           }`}
         >
@@ -316,10 +366,10 @@ const BatchRuns = () => {
           </div>
           <div className="upload-dropzone__content">
             <div className="upload-dropzone__title">
-              {slotState.uploading ? "Uploading..." : "Drop FASTQ or click to choose"}
+              {slotState.uploading ? "Uploading..." : "Drop FASTA or click to choose"}
             </div>
             <div className="upload-dropzone__subtitle">
-              {slotState.name ? `Selected: ${slotState.name}` : "Accepted formats: .fastq, .fq, .fastq.gz"}
+              {slotState.name ? `Selected: ${slotState.name}` : "Accepted formats: .fasta, .fa, .gz"}
             </div>
             {currentPath ? (
               <div className="upload-dropzone__path">Saved to: {currentPath}</div>
@@ -338,7 +388,7 @@ const BatchRuns = () => {
             fileInputRefs.current[sample.id][slot] = element;
           }}
           type="file"
-          accept=".fastq,.fq,.fastq.gz,.fq.gz"
+          accept=".fasta,.fa,.fasta.gz,.fa.gz"
           style={{ display: "none" }}
           onChange={(event) => void handleFileSelection(event, sample.id, slot)}
         />
@@ -364,16 +414,24 @@ const BatchRuns = () => {
     const invalidSample = samples.find((sample) => !sample.sampleId || sample.files.some((file) => !file));
     if (invalidSample) {
       setSubmitting(false);
-      setError("All samples must include IDs and FASTQ file paths before scheduling.");
+      setError("All samples must include IDs and FASTA file paths before scheduling.");
       return;
     }
     try {
       const payload = {
         runs: samples.map((sample) => ({
+          configOverrides: {
+            "output.dir": appSettings.defaultOutputDir,
+            "model.name": appSettings.modelName,
+            "max.length": Math.max(32, Number(appSettings.maxLength) || 256),
+            "batch.size": Math.max(1, Number(appSettings.batchSize) || 16),
+            "classification.model_bundle": "models/embedding_model_bundle.joblib",
+            ...(appSettings.device !== "auto" ? { device: appSettings.device } : {}),
+            ...(sample.configOverrides ?? {})
+          },
           sampleId: sample.sampleId,
           inputType: sample.inputType,
-          files: sample.files,
-          configOverrides: sample.configOverrides
+          files: sample.files
         }))
       };
       const batch = await api.triggerBatchRun(payload);
@@ -392,7 +450,7 @@ const BatchRuns = () => {
     let attempts = 0;
 
     while (isMountedRef.current && pollingBatchIdRef.current === batchId && attempts < maxAttempts) {
-      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await new Promise((resolve) => setTimeout(resolve, Math.max(500, appSettings.runPollIntervalMs || 2000)));
       if (!isMountedRef.current || pollingBatchIdRef.current !== batchId) {
         return;
       }
@@ -423,7 +481,7 @@ const BatchRuns = () => {
     if (isMountedRef.current && attempts >= maxAttempts) {
       setError((prev) => prev ?? "Batch is still running. Revisit the results page for updates.");
     }
-  }, []);
+  }, [appSettings.runPollIntervalMs]);
 
   const isAnyUploading = Object.values(uploadState).some(
     (state) => state.forward.uploading || state.reverse.uploading
@@ -473,11 +531,11 @@ const BatchRuns = () => {
                   </select>
                 </div>
                 <div className="form-control">
-                  <label>{sample.inputType === "paired" ? "Forward reads" : "FASTQ"}</label>
+                  <label>{sample.inputType === "paired" ? "Forward reads" : "FASTA"}</label>
                   <input
                     value={sample.files[0] ?? ""}
                     onChange={(event) => handleManualPathChange(sample.id, "forward", event.target.value)}
-                    placeholder="Upload or provide a server-accessible FASTQ path"
+                    placeholder="Upload or provide a server-accessible FASTA path"
                     required
                   />
                   {renderUploadSection(sample, "forward")}
@@ -488,7 +546,7 @@ const BatchRuns = () => {
                     <input
                       value={sample.files[1] ?? ""}
                       onChange={(event) => handleManualPathChange(sample.id, "reverse", event.target.value)}
-                      placeholder="Upload or provide a server-accessible FASTQ path"
+                      placeholder="Upload or provide a server-accessible FASTA path"
                       required
                     />
                     {renderUploadSection(sample, "reverse")}
@@ -502,7 +560,7 @@ const BatchRuns = () => {
             <button
               type="button"
               className="secondary-button"
-              onClick={() => setSamples((current) => [...current, createSample(current.length)])}
+              onClick={() => setSamples((current) => [...current, createSample(current.length, appSettings.defaultInputType)])}
             >
               <FiPlus /> Add sample
             </button>

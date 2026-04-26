@@ -1,0 +1,22 @@
+{
+  "total_classified": 14956,
+  "mean_confidence": 8.33,
+  "classification_mode": "embedding_kmeans_fallback",
+  "classifier": "MiniBatchKMeans",
+  "phylum_distribution": {
+    "OTU-010": 14956
+  },
+  "genus_distribution": {
+    "OTU-010": 14956
+  },
+  "species_distribution": {
+    "OTU-010": 14956
+  },
+  "confidence_distribution": {
+    "0-40": 14956,
+    "40-60": 0,
+    "60-80": 0,
+    "80-90": 0,
+    "90-100": 0
+  }
+}
